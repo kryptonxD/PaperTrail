@@ -680,21 +680,21 @@ async def startup():
     log_memory("6. FastAPI startup event triggered")
     logger.info(f"Loaded GROQ_API_KEY at startup: {GROQ_API_KEY[:7]}...")
     try:
-        from backend.retriever import get_collection
-        log_memory("7. Before loading custom vector store count")
+        from backend.retriever import get_collection, STORE_PATH
+        log_memory("7. Before loading custom vector store")
         collection = get_collection()
         cnt = collection.count()
-        log_memory(f"8. After custom vector store count (Count: {cnt})")
+        log_memory(f"8. After custom vector store loaded (Count: {cnt})")
         if cnt == 0:
-            logger.info("Custom vector store is empty. Running initial document ingestion...")
-            from backend.ingest import ingest_documents
-            log_memory("9. Before document ingestion")
-            ingest_documents(ALL_DOCS)
-            log_memory("10. After document ingestion")
+            logger.error(
+                f"❌ CRITICAL ERROR: Vector store file not found at {STORE_PATH} or contains 0 chunks. "
+                "Please run: 'python backend/scripts/build_vector_store.py' locally before deploying."
+            )
         else:
-            logger.info(f"Custom vector store already contains {cnt} chunks. Skipping ingestion.")
+            logger.info(f"Custom vector store loaded successfully with {cnt} chunks.")
     except Exception as e:
-        logger.error(f"Error during startup document ingestion: {e}")
+        logger.error(f"Error during startup custom vector store load: {e}")
+
 
 
 @app.on_event("shutdown")
