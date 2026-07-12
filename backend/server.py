@@ -638,13 +638,18 @@ async def delete_checklist(cid: str, request: Request):
 
 # ─── mount ─────────────────────────────────────────────────────────────────
 app.include_router(api)
+
+cors_origins_str = os.environ.get("CORS_ORIGINS") or os.environ.get("ALLOWED_ORIGINS") or "*"
+cors_origins = [o.strip() for o in cors_origins_str.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.on_event("startup")
 async def startup():
