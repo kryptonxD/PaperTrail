@@ -1,0 +1,87 @@
+{
+  "theme": "Dark",
+  "archetype": "5 (Luxury)",
+  "design_philosophy": "Modern Glam / Regal Elegance. A sophisticated blend of deepest navy foundations, rich moody jewel tones (Emerald, Maroon), and high-contrast editorial typography. Avoids typical government/utility app aesthetics by prioritizing craftsmanship, generous whitespace, and tactile materials (satin, glass, subtle gold borders).",
+  "colors": {
+    "background": "#0B101E",
+    "surface": "#131B2F",
+    "surface_glass": "rgba(19, 27, 47, 0.6)",
+    "primary": "#D4AF37",
+    "primary_hover": "#F0C84A",
+    "primary_foreground": "#0B101E",
+    "secondary": "#1B4D3E",
+    "secondary_foreground": "#4ADE80",
+    "destructive": "#5C1A1B",
+    "destructive_foreground": "#FCA5A5",
+    "muted": "#1E293B",
+    "muted_foreground": "#94A3B8",
+    "border": "rgba(212, 175, 55, 0.15)",
+    "text_primary": "#F5F2EA",
+    "text_secondary": "#CBD5E1",
+    "accent_gold": "#D4AF37"
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Cormorant Garamond', serif",
+      "body": "'Outfit', sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl font-serif tracking-tight leading-none text-[#F5F2EA]",
+      "h2": "text-3xl sm:text-4xl font-serif tracking-tight text-[#F5F2EA]",
+      "h3": "text-xl sm:text-2xl font-serif text-[#F5F2EA]",
+      "body": "text-base font-sans leading-relaxed text-[#CBD5E1]",
+      "small_label": "text-xs font-mono uppercase tracking-[0.2em] text-[#D4AF37]"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing Philosophy. 2-3x more spacing than standard SaaS. Internal padding on bordered containers must be p-6 or p-8.",
+    "container_padding": "p-6 md:p-12",
+    "gap": "gap-8 md:gap-12",
+    "border_radius": {
+      "outer": "rounded-2xl",
+      "inner": "rounded-xl",
+      "buttons": "rounded-none"
+    }
+  },
+  "surfaces_and_materials": {
+    "glassmorphism": "backdrop-blur-xl bg-[#131B2F]/60 border border-[#D4AF37]/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+    "solid_card": "bg-[#131B2F] border border-[#D4AF37]/15 hover:border-[#D4AF37]/40 transition-colors duration-300",
+    "hero_overlay": "bg-gradient-to-b from-[#0B101E]/80 via-[#0B101E]/60 to-[#0B101E]"
+  },
+  "components_instructions": {
+    "buttons": "Use flat, sharp edges (rounded-none or rounded-sm). Primary button should be solid Gold (#D4AF37) with Navy text. Hover state: slight lift (-translate-y-1) and increased brightness. Include data-testid.",
+    "search_bar": "Massive, editorial presence. Glassmorphism background, tall height (h-16), large serif text input, prominent gold search icon. Left aligned text. Requires data-testid.",
+    "badges": "Confidence Indicators: 'Verified' uses Deep Emerald bg + Green text + Gold tick. 'Partially Verified' uses Amber bg. 'Unverified' uses Deep Maroon bg + Pale Red text. Use subtle glowing drop-shadows on badges.",
+    "checklists": "Shadcn Checkbox. Override default blue focus rings with Gold focus rings (focus:ring-[#D4AF37]). Ensure large hit areas (p-4 per checklist item) and strikethrough animation for checked items.",
+    "navigation": "Sticky, glassmorphic header (z-50). Visible nav links on desktop (Outfit font, uppercase, wide tracking). Gold 'Login with Google' CTA button.",
+    "process_cards": "Bento grid mode. Mix tall and wide cards. Hover effects should illuminate the border (tracing beam effect or just border color shift). No generic Bootstrap columns.",
+    "shadcn_customization": "Ensure all Shadcn components (dialogs, menus) use the defined dark jewel colors and gold accents. Use .js extensions, not .tsx. Avoid generic Vercel look."
+  },
+  "motion_and_interactions": {
+    "hover": "Always explicitly set text color on hover. Slow, deliberate transitions: 'transition-all duration-300 ease-out'.",
+    "entrance": "Staggered fade-up for search results and process steps."
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.pexels.com/photos/21926654/pexels-photo-21926654.jpeg",
+      "description": "Rich dark crumpled satin fabric, providing a highly textured, luxurious, and non-distracting background for the hero section."
+    },
+    "regal_texture": {
+      "url": "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d",
+      "description": "Dark textured plaster wall for alternate section backgrounds."
+    },
+    "indian_architecture_accent": {
+      "url": "https://images.unsplash.com/photo-1667930723305-73b78f96a9f8",
+      "description": "Traditional domed roof building in India, to be used sparingly as a faint background image in category cards or about section, with heavy dark overlay."
+    }
+  },
+  "icons": {
+    "library": "@phosphor-icons/react",
+    "style": "Duotone or thin weight, to match the elegant serif typography."
+  },
+  "accessibility_and_testing": {
+    "testing": "All interactive elements MUST have data-testid attributes (e.g., 'data-testid=\"search-input\"', 'data-testid=\"state-selector\"', 'data-testid=\"login-button\"', 'data-testid=\"checklist-item\"').",
+    "contrast": "Ensure gold text on navy background meets APCA 3:1 for large text and 4.5:1 for body. Apply explicit focus rings."
+  }
+}

@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 0 0% 0%;
+        --foreground: 0 0% 95%;
+        --card: 0 0% 4%;
+        --card-foreground: 0 0% 95%;
+        --popover: 0 0% 4%;
+        --popover-foreground: 0 0% 95%;
+        --primary: 213 100% 48%; /* Vercel/Cyber Blue #0070F3 */
+        --primary-foreground: 0 0% 100%;
+        --secondary: 240 5.9% 10%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 5.9% 10%;
+        --muted-foreground: 240 3.8% 56.1%;
+        --accent: 213 100% 48%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 10%;
+        --input: 240 5.9% 10%;
+        --ring: 213 100% 48%;
+        --radius: 0.375rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-zinc-900;
+    }
+    html,
+    body,
+    #root {
+        background: #000000;
+        color: #ededed;
+        min-height: 100vh;
+    }
+    body {
+        margin: 0;
+        font-family:
+            "Inter",
+            "Outfit",
+            sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        letter-spacing: -0.011em;
+    }
+    ::selection {
+        background: rgba(0, 112, 243, 0.3);
+        color: #ffffff;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #000000;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #1f1f1f;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2e2e2e;
+    }
+}
+
+@layer components {
+    .glass {
+        @apply backdrop-blur-md bg-zinc-950/60 border border-zinc-900/80;
+    }
+    .blue-text {
+        color: #0070f3;
+    }
+    .serif-h {
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+    }
+    .label-mono {
+        font-family: "JetBrains Mono", monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-size: 0.72rem;
+        color: #888888;
+    }
+    .btn-gold {
+        background: #0070f3;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        font-size: 0.85rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        transition: all 200ms ease-out;
+    }
+    .btn-gold:hover {
+        background: #0060d0;
+        box-shadow: 0 0 20px rgba(0, 112, 243, 0.25);
+    }
+    .btn-ghost-gold {
+        border: 1px solid #1f1f1f;
+        color: #ededed;
+        padding: 0.7rem 1.4rem;
+        border-radius: 4px;
+        transition: all 200ms ease-out;
+        font-size: 0.85rem;
+    }
+    .btn-ghost-gold:hover {
+        border-color: #333333;
+        background: rgba(255, 255, 255, 0.03);
+    }
+    .card-lux {
+        background: #0a0a0a;
+        border: 1px solid #141414;
+        border-radius: 6px;
+        transition: all 250ms ease;
+    }
+    .card-lux:hover {
+        border-color: #222222;
+        background: #0d0d0d;
+    }
+}
