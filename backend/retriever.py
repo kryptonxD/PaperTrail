@@ -2,78 +2,92 @@ import os
 import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-import chromadb
+import pickle
+import numpy as np
+from backend.embeddings import get_embeddings
 
 logger = logging.getLogger("papertrail.retriever")
 
 ROOT_DIR = Path(__file__).parent
 CHROMA_DIR = ROOT_DIR / "data" / "chroma"
+STORE_PATH = ROOT_DIR / "data" / "vector_store.pkl"
 
-_client = None
-_collection = None
+vector_store_data: List[Dict[str, Any]] = []
 
-def get_chroma_client():
-    global _client
-    if _client is None:
-        CHROMA_DIR.mkdir(parents=True, exist_ok=True)
-        # PersistentClient saves data to disk
-        _client = chromadb.PersistentClient(path=str(CHROMA_DIR))
-    return _client
+def load_vector_store():
+    global vector_store_data
+    if STORE_PATH.exists():
+        try:
+            logger.info(f"Loading custom in-memory vector store from {STORE_PATH}...")
+            with open(STORE_PATH, "rb") as f:
+                vector_store_data = pickle.load(f)
+            logger.info(f"Loaded {len(vector_store_data)} embedding vectors successfully.")
+        except Exception as e:
+            logger.error(f"Failed to load vector store from pickle: {e}")
+            vector_store_data = []
+    else:
+        logger.warning(f"Vector store pickle file not found at {STORE_PATH}. Needs seeding.")
+        vector_store_data = []
+
+# Load on module import
+load_vector_store()
+
+class MockCollection:
+    def count(self):
+        return len(vector_store_data)
 
 def get_collection():
-    global _collection
-    if _collection is None:
-        client = get_chroma_client()
-        # Use cosine similarity for the collection (will use default ONNXMiniLM_L6_V2 embedding function automatically)
-        _collection = client.get_or_create_collection(
-            name="documents",
-            metadata={"hnsw:space": "cosine"}
-        )
-    return _collection
+    return MockCollection()
 
-
+def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    dot = np.dot(a, b)
+    norm_a = np.linalg.norm(a)
+    norm_b = np.linalg.norm(b)
+    if norm_a == 0 or norm_b == 0:
+        return 0.0
+    return float(dot / (norm_a * norm_b))
 
 def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Dict[str, Any]]:
-    collection = get_collection()
-    
-    # Check if collection is empty
-    count = collection.count()
-    if count == 0:
-        logger.warning("ChromaDB collection is empty. Returning empty list.")
+    # Lazy initial check
+    if not vector_store_data:
+        logger.warning("Retrieval requested but vector store is empty.")
         return []
         
-    # Construct metadata filter
-    where_filter = {}
-    if state:
-        # Standardize state capitalization
-        where_filter["state"] = state.strip().capitalize()
-        
-    # We query more than top_k to account for chunk deduplication
-    n_results = min(count, max(top_k * 3, 15))
-    
     try:
-        # ChromaDB automatically embeds query_texts via the collection's embedding_function
-        results = collection.query(
-            query_texts=[query],
-            n_results=n_results,
-            where=where_filter if where_filter else None
-        )
+        # Generate query embedding
+        query_embs = get_embeddings([query])
+        if not query_embs:
+            return []
+        query_emb = np.array(query_embs[0])
     except Exception as e:
-        logger.error(f"Chroma query failed: {e}")
+        logger.error(f"Failed to generate query embedding: {e}")
         return []
         
-    if not results or not results["documents"] or not results["documents"][0]:
-
-        return []
+    scores = []
+    for item in vector_store_data:
+        meta = item["metadata"]
         
-    ids = results["ids"][0]
-    metadatas = results["metadatas"][0]
-    distances = results["distances"][0]
+        # Metadata filter by state
+        item_state = meta.get("state")
+        if state and item_state and item_state.lower().strip() != state.lower().strip():
+            continue
+            
+        try:
+            emb = np.array(item["embedding"])
+            sim = cosine_similarity(query_emb, emb)
+            scores.append((sim, item))
+        except Exception as e:
+            logger.warning(f"Error calculating similarity for chunk {item.get('id')}: {e}")
+            continue
+            
+    # Sort by similarity descending
+    scores.sort(key=lambda x: x[0], reverse=True)
     
     seen_docs = set()
     docs = []
     
-    for doc_id, meta, dist in zip(ids, metadatas, distances):
+    for sim, item in scores:
+        meta = item["metadata"]
         parent_id = meta.get("doc_id")
         if not parent_id:
             continue
@@ -83,8 +97,6 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
             
         seen_docs.add(parent_id)
         
-        # Reconstruct full document from metadata
-        score = 1.0 - dist  # Cosine similarity = 1 - distance
         d = {
             "id": parent_id,
             "name": meta.get("name", ""),
@@ -102,7 +114,7 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
             "required_documents": meta.get("required_documents", ""),
             "category": meta.get("category", "General"),
             "is_community_note": meta.get("is_community_note", False),
-            "_score": float(score)
+            "_score": float(sim)
         }
         docs.append(d)
         

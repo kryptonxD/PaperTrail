@@ -1,9 +1,10 @@
 import logging
+import pickle
 from typing import List, Dict, Any
-from backend.retriever import get_collection
+from backend.embeddings import get_embeddings
+from backend.retriever import get_collection, STORE_PATH
 
 logger = logging.getLogger("papertrail.ingest")
-
 
 def make_steps_chunk(d: Dict[str, Any]) -> str:
     parts = [
@@ -36,7 +37,6 @@ def make_fees_chunk(d: Dict[str, Any]) -> str:
     return " | ".join([p for p in parts if p])
 
 def make_metadata(d: Dict[str, Any], chunk_type: str) -> Dict[str, Any]:
-    # ChromaDB metadata values must be str, int, float, or bool
     return {
         "doc_id": str(d.get("id", "")),
         "name": str(d.get("name", "")),
@@ -58,8 +58,6 @@ def make_metadata(d: Dict[str, Any], chunk_type: str) -> Dict[str, Any]:
     }
 
 def ingest_documents(docs: List[Dict[str, Any]]):
-    collection = get_collection()
-    
     chunks_text = []
     ids = []
     metadatas = []
@@ -86,11 +84,24 @@ def ingest_documents(docs: List[Dict[str, Any]]):
     if not chunks_text:
         return
         
-    logger.info(f"Ingesting/updating {len(chunks_text)} chunks in ChromaDB (automatic ONNX embedding)...")
-    collection.upsert(
-        ids=ids,
-        documents=chunks_text,
-        metadatas=metadatas
-    )
+    logger.info(f"Generating embeddings for {len(chunks_text)} chunks using fastembed...")
+    embeddings = get_embeddings(chunks_text)
+    
+    vector_store = []
+    for chunk_id, text, meta, emb in zip(ids, chunks_text, metadatas, embeddings):
+        vector_store.append({
+            "id": chunk_id,
+            "text": text,
+            "metadata": meta,
+            "embedding": emb
+        })
+        
+    STORE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    logger.info(f"Saving {len(vector_store)} chunks to custom vector store at {STORE_PATH}...")
+    with open(STORE_PATH, "wb") as f:
+        pickle.dump(vector_store, f)
+        
+    # Reload the custom vector store in retriever
+    from backend.retriever import load_vector_store
+    load_vector_store()
     logger.info("Ingestion completed successfully.")
-
