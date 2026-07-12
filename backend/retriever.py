@@ -21,16 +21,23 @@ def get_chroma_client():
         _client = chromadb.PersistentClient(path=str(CHROMA_DIR))
     return _client
 
+class PaperTrailEmbeddingFunction(chromadb.EmbeddingFunction):
+    def __call__(self, input: list) -> list:
+        # Re-use our singleton get_embeddings to save memory
+        return get_embeddings(input)
+
 def get_collection():
     global _collection
     if _collection is None:
         client = get_chroma_client()
-        # Use cosine similarity for the collection
+        # Use cosine similarity for the collection and pass our custom embedding function
         _collection = client.get_or_create_collection(
             name="documents",
-            metadata={"hnsw:space": "cosine"}
+            metadata={"hnsw:space": "cosine"},
+            embedding_function=PaperTrailEmbeddingFunction()
         )
     return _collection
+
 
 def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Dict[str, Any]]:
     collection = get_collection()
