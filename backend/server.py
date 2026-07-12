@@ -663,8 +663,28 @@ async def delete_checklist(cid: str, request: Request):
 # ─── mount ─────────────────────────────────────────────────────────────────
 app.include_router(api)
 
-cors_origins_str = os.environ.get("CORS_ORIGINS") or os.environ.get("ALLOWED_ORIGINS") or "*"
-cors_origins = [o.strip() for o in cors_origins_str.split(",") if o.strip()]
+cors_origins_str = os.environ.get("CORS_ORIGINS") or os.environ.get("ALLOWED_ORIGINS") or ""
+cors_origins = []
+if cors_origins_str:
+    cors_origins = [o.strip().strip("'\"").rstrip("/") for o in cors_origins_str.split(",") if o.strip()]
+
+# Add standard local dev origins by default
+default_dev_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
+for origin in default_dev_origins:
+    if origin not in cors_origins:
+        cors_origins.append(origin)
+
+# Remove '*' wildcard if present, since it crashes Starlette when allow_credentials=True
+if "*" in cors_origins:
+    cors_origins.remove("*")
+    logger.warning("CORS: '*' wildcard removed because allow_credentials=True is set. Explicit origins used instead.")
+
+logger.info(f"CORS origins configured: {cors_origins}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -673,6 +693,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 @app.on_event("startup")
