@@ -1,9 +1,9 @@
 import logging
 from typing import List, Dict, Any
-from backend.embeddings import get_embeddings
 from backend.retriever import get_collection
 
 logger = logging.getLogger("papertrail.ingest")
+
 
 def make_steps_chunk(d: Dict[str, Any]) -> str:
     parts = [
@@ -86,14 +86,11 @@ def ingest_documents(docs: List[Dict[str, Any]]):
     if not chunks_text:
         return
         
-    logger.info(f"Generating embeddings for {len(chunks_text)} chunks...")
-    embeddings = get_embeddings(chunks_text)
-    
-    logger.info(f"Ingesting/updating {len(chunks_text)} chunks in ChromaDB...")
+    logger.info(f"Ingesting/updating {len(chunks_text)} chunks in ChromaDB (automatic ONNX embedding)...")
     collection.upsert(
         ids=ids,
         documents=chunks_text,
-        embeddings=embeddings,
         metadatas=metadatas
     )
     logger.info("Ingestion completed successfully.")
+

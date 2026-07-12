@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import chromadb
-from backend.embeddings import get_embeddings
 
 logger = logging.getLogger("papertrail.retriever")
 
@@ -21,22 +20,17 @@ def get_chroma_client():
         _client = chromadb.PersistentClient(path=str(CHROMA_DIR))
     return _client
 
-class PaperTrailEmbeddingFunction(chromadb.EmbeddingFunction):
-    def __call__(self, input: list) -> list:
-        # Re-use our singleton get_embeddings to save memory
-        return get_embeddings(input)
-
 def get_collection():
     global _collection
     if _collection is None:
         client = get_chroma_client()
-        # Use cosine similarity for the collection and pass our custom embedding function
+        # Use cosine similarity for the collection (will use default ONNXMiniLM_L6_V2 embedding function automatically)
         _collection = client.get_or_create_collection(
             name="documents",
-            metadata={"hnsw:space": "cosine"},
-            embedding_function=PaperTrailEmbeddingFunction()
+            metadata={"hnsw:space": "cosine"}
         )
     return _collection
+
 
 
 def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Dict[str, Any]]:
@@ -48,11 +42,6 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
         logger.warning("ChromaDB collection is empty. Returning empty list.")
         return []
         
-    query_embs = get_embeddings([query])
-    if not query_embs:
-        return []
-    query_emb = query_embs[0]
-    
     # Construct metadata filter
     where_filter = {}
     if state:
@@ -63,8 +52,9 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
     n_results = min(count, max(top_k * 3, 15))
     
     try:
+        # ChromaDB automatically embeds query_texts via the collection's embedding_function
         results = collection.query(
-            query_embeddings=[query_emb],
+            query_texts=[query],
             n_results=n_results,
             where=where_filter if where_filter else None
         )
@@ -73,6 +63,7 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
         return []
         
     if not results or not results["documents"] or not results["documents"][0]:
+
         return []
         
     ids = results["ids"][0]
