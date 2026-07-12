@@ -1,5 +1,22 @@
 """PaperTrail backend — RAG-powered Indian government document guidance."""
 import os
+import sys
+
+def log_memory(stage: str):
+    try:
+        import resource
+        mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0
+    except ImportError:
+        try:
+            import psutil
+            process = psutil.Process(os.getpid())
+            mem = process.memory_info().rss / (1024.0 * 1024.0)
+        except ImportError:
+            mem = 0.0
+    print(f"--- MEMORY DIAGNOSIS --- PID: {os.getpid()} | Parent PID: {os.getppid()} | Stage: {stage} | RSS Memory: {mem:.2f} MB", flush=True)
+
+log_memory("1. Before any imports (Start of server.py)")
+
 import json
 import re
 import uuid
@@ -9,10 +26,11 @@ import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
-import sys
-from pathlib import Path
+
 # Add parent directory to python path to resolve absolute imports of 'backend' when executing from inside backend folder
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+log_memory("2. After standard library imports")
 
 from fastapi import FastAPI, APIRouter, HTTPException, Header, Request, Response
 from fastapi.responses import JSONResponse
@@ -26,6 +44,9 @@ from groq import AsyncGroq
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env", override=True)
+
+log_memory("3. After third-party library imports")
+
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -71,8 +92,11 @@ if not GROQ_API_KEY or not SUPABASE_URL or not SUPABASE_ANON_KEY:
 
 _groq = AsyncGroq(api_key=GROQ_API_KEY)
 
+log_memory("4. Before AsyncIOMotorClient initialization")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
+log_memory("5. After AsyncIOMotorClient initialization")
+
 
 # ─── Data loading + BM25 indexing ──────────────────────────────────────────
 def _load_state(fname: str, state: str) -> List[Dict[str, Any]]:
@@ -653,18 +677,25 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
+    log_memory("6. FastAPI startup event triggered")
     logger.info(f"Loaded GROQ_API_KEY at startup: {GROQ_API_KEY[:7]}...")
     try:
         from backend.retriever import get_collection
+        log_memory("7. Before loading custom vector store count")
         collection = get_collection()
-        if collection.count() == 0:
-            logger.info("ChromaDB is empty. Running initial document ingestion...")
+        cnt = collection.count()
+        log_memory(f"8. After custom vector store count (Count: {cnt})")
+        if cnt == 0:
+            logger.info("Custom vector store is empty. Running initial document ingestion...")
             from backend.ingest import ingest_documents
+            log_memory("9. Before document ingestion")
             ingest_documents(ALL_DOCS)
+            log_memory("10. After document ingestion")
         else:
-            logger.info(f"ChromaDB already contains {collection.count()} chunks. Skipping ingestion.")
+            logger.info(f"Custom vector store already contains {cnt} chunks. Skipping ingestion.")
     except Exception as e:
         logger.error(f"Error during startup document ingestion: {e}")
+
 
 @app.on_event("shutdown")
 async def shutdown():

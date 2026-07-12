@@ -9,10 +9,13 @@ _model = None
 def get_embedding_model():
     global _model
     if _model is None:
+        from backend.server import log_memory
+        log_memory("Before fastembed TextEmbedding model initialization")
         logger.info("Initializing fastembed TextEmbedding model 'sentence-transformers/all-MiniLM-L6-v2'...")
         # fastembed runs ONNX models on CPU by default
         _model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
         logger.info("fastembed model initialized successfully.")
+        log_memory("After fastembed TextEmbedding model initialization")
     return _model
 
 def get_embeddings(texts: List[str]) -> List[List[float]]:
