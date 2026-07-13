@@ -661,7 +661,7 @@ async def delete_checklist(cid: str, request: Request):
     return {"ok": True}
 
 # ─── mount ─────────────────────────────────────────────────────────────────
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     """Lightweight health check endpoint for uptime monitoring to keep Render active."""
     return {"status": "ok"}
