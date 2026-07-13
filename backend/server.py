@@ -35,7 +35,7 @@ log_memory("2. After standard library imports")
 from fastapi import FastAPI, APIRouter, HTTPException, Header, Request, Response
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
 from backend.retriever import retrieve
@@ -661,26 +661,21 @@ async def delete_checklist(cid: str, request: Request):
     return {"ok": True}
 
 # ─── mount ─────────────────────────────────────────────────────────────────
-@app.api_route("/health", methods=["GET", "HEAD"])
-async def health_check():
-    """Lightweight health check endpoint for uptime monitoring to keep Render active."""
-    return {"status": "ok"}
-
-app.include_router(api)
-
 cors_origins_str = os.environ.get("CORS_ORIGINS") or os.environ.get("ALLOWED_ORIGINS") or ""
 cors_origins = []
 if cors_origins_str:
     cors_origins = [o.strip().strip("'\"").rstrip("/") for o in cors_origins_str.split(",") if o.strip()]
 
-# Add standard local dev origins by default
-default_dev_origins = [
+# Add standard production and dev origins by default
+default_origins = [
+    "https://www.solvailabs.com",
+    "https://paper-trail-mvp.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000"
 ]
-for origin in default_dev_origins:
+for origin in default_origins:
     if origin not in cors_origins:
         cors_origins.append(origin)
 
@@ -698,6 +693,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.api_route("/health", methods=["GET", "HEAD"])
+async def health_check():
+    """Lightweight health check endpoint for uptime monitoring to keep Render active."""
+    return {"status": "ok"}
+
+app.include_router(api)
+
 
 
 
