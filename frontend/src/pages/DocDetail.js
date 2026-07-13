@@ -135,7 +135,7 @@ export default function DocDetail() {
                                 href={doc.source_url} 
                                 target="_blank" 
                                 rel="noreferrer" 
-                                className="border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-text-secondary text-xs px-4 py-2.5 rounded transition-all inline-flex items-center gap-2"
+                                className="border border-border-color bg-bg-card hover:bg-zinc-100 dark:hover:bg-[#1c1c1c] text-text-secondary text-xs px-4 py-2.5 rounded transition-all inline-flex items-center gap-2"
                             >
                                 <ExternalLink className="w-3.5 h-3.5" /> Official portal
                             </a>

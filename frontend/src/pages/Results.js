@@ -201,7 +201,7 @@ export default function Results() {
                                             key={m.id}
                                             data-testid={`related-doc-${m.id}`}
                                             onClick={() => nav(`/doc/${m.id}?q=${encodeURIComponent(q)}`)}
-                                            className="bg-bg-card border border-border-color hover:border-zinc-700 p-5 rounded text-left transition-all group flex flex-col justify-between"
+                                            className="bg-bg-card border border-border-color hover:border-accent-blue p-5 rounded text-left transition-all group flex flex-col justify-between"
                                         >
                                             <div className="flex items-center justify-between gap-4 mb-3 w-full">
 

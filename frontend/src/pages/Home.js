@@ -141,7 +141,7 @@ export default function Home() {
                                     key={s.code}
                                     data-testid={`state-chip-${s.code.toLowerCase()}`}
                                     onClick={() => setState(s.code)}
-                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-bg-card border border-border-color text-text-secondary hover:border-zinc-700 hover:text-text-primary"}`}
+                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-bg-card border border-border-color text-text-secondary hover:border-accent-blue hover:text-text-primary"}`}
                                 >
                                     {s.label}
                                 </button>
@@ -180,7 +180,7 @@ export default function Home() {
                         <Link 
                             to="/browse" 
                             data-testid="browse-all-link" 
-                            className="text-xs border border-zinc-805 bg-bg-card hover:bg-[#1c1c1c] text-text-secondary px-4 py-2.5 rounded transition-all"
+                            className="text-xs border border-zinc-805 bg-bg-card hover:bg-zinc-100 dark:hover:bg-[#1c1c1c] text-text-secondary px-4 py-2.5 rounded transition-all"
                         >
                             View all processes
                         </Link>
@@ -192,7 +192,7 @@ export default function Home() {
                                 key={c.key}
                                 data-testid={`category-${c.key.toLowerCase().replace(/ /g, "-")}`}
                                 onClick={() => nav(`/browse?category=${encodeURIComponent(c.key)}`)}
-                                className="bg-bg-card border border-border-color hover:border-border-color hover:bg-[#1c1c1c] p-6 rounded-lg transition-all text-left group animate-fade-up"
+                                className="bg-bg-card border border-border-color hover:border-border-color hover:bg-zinc-100 dark:hover:bg-[#1c1c1c] p-6 rounded-lg transition-all text-left group animate-fade-up"
                                 style={{ animationDelay: `${i * 50}ms` }}
                             >
                                 {getCategoryIcon(c.icon)}

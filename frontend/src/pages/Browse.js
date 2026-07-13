@@ -49,7 +49,7 @@ export default function Browse() {
                                 key={d.id}
                                 data-testid={`browse-doc-${d.id}`}
                                 onClick={() => nav(`/doc/${d.id}`)}
-                                className="bg-bg-card border border-border-color hover:border-zinc-700 p-6 rounded-lg text-left transition-all group animate-fade-up"
+                                className="bg-bg-card border border-border-color hover:border-accent-blue p-6 rounded-lg text-left transition-all group animate-fade-up"
                                 style={{ animationDelay: `${i * 30}ms` }}
                             >
                                 <div className="flex items-center justify-between mb-4 gap-2">

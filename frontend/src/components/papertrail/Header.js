@@ -104,7 +104,7 @@ export default function Header() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={toggleTheme}
-                            className="border border-border-color bg-bg-card hover:bg-[#1c1c1c] p-1.5 rounded transition-all flex items-center justify-center"
+                            className="border border-border-color bg-bg-card hover:bg-zinc-100 dark:hover:bg-[#1c1c1c] p-1.5 rounded transition-all flex items-center justify-center"
                             aria-label="Toggle theme"
                             data-testid="theme-toggle"
                         >
@@ -119,7 +119,7 @@ export default function Header() {
                                 <button
                                     data-testid="my-checklists-btn"
                                     onClick={() => nav("/checklists")}
-                                    className="hidden sm:inline-block border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-text-secondary text-xs px-3 py-1.5 rounded transition-all"
+                                    className="hidden sm:inline-block border border-border-color bg-bg-card hover:bg-zinc-100 dark:hover:bg-[#1c1c1c] text-text-secondary text-xs px-3 py-1.5 rounded transition-all"
                                 >
                                     My Checklists
                                 </button>
