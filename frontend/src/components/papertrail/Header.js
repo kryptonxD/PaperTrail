@@ -2,11 +2,16 @@ import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { STATES, LANGUAGES } from "@/lib/api";
+import { useTheme } from "@/context/ThemeContext";
+import { Sun, Moon } from "lucide-react";
+
 
 export default function Header() {
     const nav = useNavigate();
     const loc = useLocation();
     const { state, setState, language, setLanguage, user, logout } = useApp();
+    const { theme, toggleTheme } = useTheme();
+
 
     function startLogin() {
         const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
@@ -21,12 +26,12 @@ export default function Header() {
     const isCurrent = (path) => loc.pathname === path;
 
     return (
-        <header className="sticky top-0 z-50 border-b border-neutral-900 bg-[#131313]/90 backdrop-blur-md" data-testid="site-header">
+        <header className="sticky top-0 z-50 border-b border-border-color bg-bg-card/90 backdrop-blur-md" data-testid="site-header">
             <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
                 {/* Logo and Nav links */}
                 <div className="flex items-center gap-8">
                     <Link to="/" className="flex items-center gap-3 group" data-testid="logo-link">
-                        <div className="w-8 h-8 rounded flex items-center justify-center bg-[#161616] border border-zinc-800 text-white font-bold text-base transition-colors group-hover:border-blue-600">
+                        <div className="w-8 h-8 rounded flex items-center justify-center bg-bg-card border border-border-color text-white font-bold text-base transition-colors group-hover:border-blue-600">
                             P
                         </div>
                         <span className="font-semibold text-lg text-white tracking-tight">PaperTrail</span>
@@ -35,26 +40,26 @@ export default function Header() {
                     <nav className="hidden md:flex items-center gap-6">
                         <Link 
                             to="/" 
-                            className={`text-sm transition-colors ${isCurrent("/") ? "text-white font-medium" : "text-zinc-400 hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
                         >
                             Home
                         </Link>
                         <Link 
                             to="/browse" 
-                            className={`text-sm transition-colors ${isCurrent("/browse") ? "text-white font-medium" : "text-zinc-400 hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/browse") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
                         >
                             Browse
                         </Link>
                         <Link 
                             to="/vision" 
-                            className={`text-sm transition-colors ${isCurrent("/vision") ? "text-white font-medium" : "text-zinc-400 hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/vision") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
                         >
                             Vision
                         </Link>
                         {user && (
                             <Link 
                                 to="/checklists" 
-                                className={`text-sm transition-colors ${isCurrent("/checklists") ? "text-white font-medium" : "text-zinc-400 hover:text-white"}`}
+                                className={`text-sm transition-colors ${isCurrent("/checklists") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
                             >
                                 Checklists
                             </Link>
@@ -71,7 +76,7 @@ export default function Header() {
                                 data-testid="state-selector"
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                className="bg-[#161616] border border-zinc-800 text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
+                                className="bg-bg-card border border-border-color text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
                             >
                                 {STATES.map((s) => (
                                     <option key={s.code} value={s.code}>
@@ -85,7 +90,7 @@ export default function Header() {
                                 data-testid="language-selector"
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
-                                className="bg-[#161616] border border-zinc-800 text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
+                                className="bg-bg-card border border-border-color text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
                             >
                                 {LANGUAGES.map((l) => (
                                     <option key={l.code} value={l.code}>
@@ -97,12 +102,24 @@ export default function Header() {
                     </div>
 
                     <div className="flex items-center gap-3">
+                        <button
+                            onClick={toggleTheme}
+                            className="border border-border-color bg-bg-card hover:bg-[#1c1c1c] p-1.5 rounded transition-all flex items-center justify-center"
+                            aria-label="Toggle theme"
+                            data-testid="theme-toggle"
+                        >
+                            {theme === "dark" ? (
+                                <Sun className="w-3.5 h-3.5 text-text-secondary hover:text-white" />
+                            ) : (
+                                <Moon className="w-3.5 h-3.5 text-text-secondary hover:text-black" />
+                            )}
+                        </button>
                         {user ? (
                             <>
                                 <button
                                     data-testid="my-checklists-btn"
                                     onClick={() => nav("/checklists")}
-                                    className="hidden sm:inline-block border border-zinc-800 bg-[#161616] hover:bg-[#1c1c1c] text-zinc-300 text-xs px-3 py-1.5 rounded transition-all"
+                                    className="hidden sm:inline-block border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-zinc-300 text-xs px-3 py-1.5 rounded transition-all"
                                 >
                                     My Checklists
                                 </button>
@@ -110,12 +127,12 @@ export default function Header() {
                                 <button
                                     data-testid="logout-btn"
                                     onClick={logout}
-                                    className="text-zinc-400 hover:text-white text-xs transition-colors"
+                                    className="text-text-secondary hover:text-white text-xs transition-colors"
                                 >
                                     Sign out
                                 </button>
                                 {user.picture && (
-                                    <img src={user.picture} alt="" className="w-7 h-7 rounded-full border border-zinc-800" />
+                                    <img src={user.picture} alt="" className="w-7 h-7 rounded-full border border-border-color" />
                                 )}
                             </>
                         ) : (

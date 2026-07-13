@@ -19,28 +19,28 @@ const ROADMAP_ITEMS = [
     {
         tag: "Future — V3",
         status: "Planned",
-        statusColor: "text-zinc-500 bg-zinc-900/30 border-zinc-800/40",
+        statusColor: "text-text-secondary bg-zinc-900/30 border-border-color/40",
         title: "Every Process, Every City",
         desc: "Full coverage across all civic process categories in major metropolitan cities. Introducing WhatsApp search capability, automated reminders, and proactive renewal notifications.",
     },
     {
         tag: "Future — V4",
         status: "Planned",
-        statusColor: "text-zinc-500 bg-zinc-900/30 border-zinc-800/40",
+        statusColor: "text-text-secondary bg-zinc-900/30 border-border-color/40",
         title: "Real Accountability",
         desc: "Moving beyond basic processes by identifying the exact government offices and specific authorities responsible, making public processes feel traceable rather than anonymous.",
     },
     {
         tag: "Future — V5",
         status: "Planned",
-        statusColor: "text-zinc-500 bg-zinc-900/30 border-zinc-800/40",
+        statusColor: "text-text-secondary bg-zinc-900/30 border-border-color/40",
         title: "Every State, Every District",
         desc: "Achieving national coverage across all Indian states and districts, integrating AI voice support, and sending notifications as new regions go live.",
     },
     {
         tag: "Beyond",
         status: "Exploring",
-        statusColor: "text-zinc-500 bg-zinc-900/30 border-zinc-800/40",
+        statusColor: "text-text-secondary bg-zinc-900/30 border-border-color/40",
         title: "Expanding the Scope",
         desc: "Exploring adjacent regulated domains like banking, insurance, and complex financial paperwork once the core civic-tech database is solid.",
     },
@@ -48,7 +48,7 @@ const ROADMAP_ITEMS = [
 
 export default function Vision() {
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-zinc-100 pb-24">
+        <div className="min-h-screen bg-bg-page text-text-primary pb-24">
             <Header />
             <div className="max-w-4xl mx-auto px-6 md:px-10 py-16">
                 {/* Intro Section */}
@@ -57,13 +57,13 @@ export default function Vision() {
                     <h1 className="font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-6">
                         Roadmap
                     </h1>
-                    <p className="text-zinc-400 text-base md:text-lg leading-relaxed">
+                    <p className="text-text-secondary text-base md:text-lg leading-relaxed">
                         PaperTrail today is the first step. Here's where it's headed.
                     </p>
                 </div>
 
                 {/* Vertical Timeline */}
-                <div className="relative pl-6 md:pl-8 border-l border-zinc-900/80 ml-2 space-y-16">
+                <div className="relative pl-6 md:pl-8 border-l border-border-color/80 ml-2 space-y-16">
                     {ROADMAP_ITEMS.map((item, i) => (
                         <div key={i} className="relative group animate-fade-up" style={{ animationDelay: `${i * 100}ms` }}>
                             {/* Dot indicator */}
@@ -71,7 +71,7 @@ export default function Vision() {
 
                             <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 mb-3">
                                 <div className="flex items-center gap-3">
-                                    <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">{item.tag}</span>
+                                    <span className="text-xs font-mono text-text-secondary uppercase tracking-widest">{item.tag}</span>
                                     <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${item.statusColor}`}>
                                         {item.status}
                                     </span>
@@ -81,7 +81,7 @@ export default function Vision() {
                             <h2 className="font-bold text-xl md:text-2xl text-white mb-3 tracking-tight group-hover:text-blue-500 transition-colors">
                                 {item.title}
                             </h2>
-                            <p className="text-sm md:text-base text-zinc-500 leading-relaxed max-w-2xl">
+                            <p className="text-sm md:text-base text-text-secondary leading-relaxed max-w-2xl">
                                 {item.desc}
                             </p>
                         </div>

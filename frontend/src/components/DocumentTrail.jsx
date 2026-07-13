@@ -4,10 +4,10 @@ export default function DocumentTrail() {
     const chips = [
         { label: "Submitted", color: "#555555" },
         { label: "Verified", color: "#555555" },
-        { label: "Approved", color: "#3B82F6" },
+        { label: "Approved", color: "var(--accent-blue)" },
         { label: "Submitted", color: "#555555" },
         { label: "Verified", color: "#555555" },
-        { label: "Approved", color: "#3B82F6" },
+        { label: "Approved", color: "var(--accent-blue)" },
     ];
 
     // Double the list to make the loop seamless
@@ -50,8 +50,8 @@ export default function DocumentTrail() {
                     <div
                         key={idx}
                         style={{
-                            background: "#111111",
-                            border: "1px solid #222222",
+                            background: "var(--bg-card)",
+                            border: "1px solid var(--border-color)",
                             borderRadius: "6px",
                             padding: "8px 10px",
                             display: "flex",
@@ -73,7 +73,7 @@ export default function DocumentTrail() {
                         />
                         <span
                             style={{
-                                color: "#AAAAAA",
+                                color: "var(--text-secondary)",
                                 fontSize: "11px",
                                 fontFamily: "'Outfit', sans-serif",
                                 fontWeight: 500,

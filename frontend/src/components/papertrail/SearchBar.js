@@ -16,9 +16,9 @@ export default function SearchBar({ initial = "", size = "hero" }) {
     return (
         <form onSubmit={submit} className="w-full" data-testid="search-form">
             <div
-                className={`bg-[#161616]/90 border border-zinc-900 flex items-center gap-4 px-5 md:px-7 ${hero ? "h-16 md:h-18" : "h-13"} rounded-lg group focus-within:border-blue-600 transition-all duration-200`}
+                className={`bg-bg-card/90 border border-border-color flex items-center gap-4 px-5 md:px-7 ${hero ? "h-16 md:h-18" : "h-13"} rounded-lg group focus-within:border-blue-600 transition-all duration-200`}
             >
-                <Search className={`text-zinc-500 group-focus-within:text-blue-500 ${hero ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-colors`} />
+                <Search className={`text-text-secondary group-focus-within:text-blue-500 ${hero ? "w-5 h-5" : "w-4 h-4"} shrink-0 transition-colors`} />
                 <input
                     data-testid="search-input"
                     autoFocus={hero}

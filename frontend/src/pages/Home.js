@@ -90,12 +90,12 @@ export default function Home() {
     const { state, setState } = useApp();
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-zinc-100 flex flex-col justify-between">
+        <div className="min-h-screen bg-bg-page text-text-primary flex flex-col justify-between">
             <div>
                 <Header />
                 {/* HERO */}
                 <section className="relative max-w-6xl mx-auto px-6 md:px-10 pt-28 pb-20" data-testid="hero">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#161616] border border-zinc-800 text-xs text-zinc-500 mb-8 animate-fade-up">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-bg-card border border-border-color text-xs text-text-secondary mb-8 animate-fade-up">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                         Version 2.0 Live · Karnataka & Maharashtra
                     </div>
@@ -106,7 +106,7 @@ export default function Home() {
                         </h1>
                         <DocumentTrail />
                     </div>
-                    <p className="text-base md:text-lg text-zinc-400 max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: "160ms" }}>
+                    <p className="text-base md:text-lg text-text-secondary max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: "160ms" }}>
                         Search any official document process. Get clear, step-by-step checklists, verified fees, locations, and requirements without the government runaround.
                     </p>
 
@@ -115,7 +115,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 mt-6 text-sm animate-fade-up" style={{ animationDelay: "320ms" }}>
-                        <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mr-2">Suggestions:</span>
+                        <span className="text-xs text-text-secondary uppercase tracking-wider font-semibold mr-2">Suggestions:</span>
                         {[
                             "How do I apply for a Caste Certificate?",
                             "Register a rent agreement",
@@ -125,7 +125,7 @@ export default function Home() {
                                 key={s}
                                 data-testid={`sample-query-${s.slice(0, 10)}`}
                                 onClick={() => nav(`/search?q=${encodeURIComponent(s)}`)}
-                                className="px-3 py-1.5 rounded bg-[#161616] border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 text-xs transition-colors"
+                                className="px-3 py-1.5 rounded bg-bg-card border border-border-color text-text-secondary hover:text-white hover:border-zinc-700 text-xs transition-colors"
                             >
                                 {s}
                             </button>
@@ -134,14 +134,14 @@ export default function Home() {
 
                     {/* State picker inline */}
                     <div className="mt-16 flex flex-col sm:flex-row sm:items-center gap-4 animate-fade-up" style={{ animationDelay: "400ms" }}>
-                        <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Select Region</span>
+                        <span className="text-xs text-text-secondary uppercase tracking-wider font-semibold">Select Region</span>
                         <div className="flex gap-2">
                             {STATES.map((s) => (
                                 <button
                                     key={s.code}
                                     data-testid={`state-chip-${s.code.toLowerCase()}`}
                                     onClick={() => setState(s.code)}
-                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-[#161616] border border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"}`}
+                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-bg-card border border-border-color text-text-secondary hover:border-zinc-700 hover:text-zinc-200"}`}
                                 >
                                     {s.label}
                                 </button>
@@ -152,7 +152,7 @@ export default function Home() {
                 </section>
 
                 {/* TRUST / VALUE PROP (Borders dropped, uses whitespace and clean typography grid) */}
-                <section className="max-w-6xl mx-auto px-6 md:px-10 py-16 border-t border-zinc-900/60">
+                <section className="max-w-6xl mx-auto px-6 md:px-10 py-16 border-t border-border-color/60">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
                         {[
                             { k: "Confidence Verified", v: "Every guide highlights the confidence levels of the requirements, fees, and location sources." },
@@ -162,7 +162,7 @@ export default function Home() {
                         ].map((t, i) => (
                             <div key={i} className="animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
                                 <h3 className="font-semibold text-white text-base mb-2">{t.k}</h3>
-                                <p className="text-sm text-zinc-500 leading-relaxed">{t.v}</p>
+                                <p className="text-sm text-text-secondary leading-relaxed">{t.v}</p>
                             </div>
                         ))}
                     </div>
@@ -180,7 +180,7 @@ export default function Home() {
                         <Link 
                             to="/browse" 
                             data-testid="browse-all-link" 
-                            className="text-xs border border-zinc-805 bg-[#161616] hover:bg-[#1c1c1c] text-zinc-300 px-4 py-2.5 rounded transition-all"
+                            className="text-xs border border-zinc-805 bg-bg-card hover:bg-[#1c1c1c] text-zinc-300 px-4 py-2.5 rounded transition-all"
                         >
                             View all processes
                         </Link>
@@ -192,20 +192,20 @@ export default function Home() {
                                 key={c.key}
                                 data-testid={`category-${c.key.toLowerCase().replace(/ /g, "-")}`}
                                 onClick={() => nav(`/browse?category=${encodeURIComponent(c.key)}`)}
-                                className="bg-[#161616] border border-zinc-900 hover:border-zinc-800 hover:bg-[#1c1c1c] p-6 rounded-lg transition-all text-left group animate-fade-up"
+                                className="bg-bg-card border border-border-color hover:border-border-color hover:bg-[#1c1c1c] p-6 rounded-lg transition-all text-left group animate-fade-up"
                                 style={{ animationDelay: `${i * 50}ms` }}
                             >
                                 {getCategoryIcon(c.icon)}
                                 <div className="font-bold text-lg text-white mb-2 group-hover:text-blue-500 transition-colors">{c.label}</div>
-                                <p className="text-xs text-zinc-500 leading-relaxed mb-6">{c.desc}</p>
-                                <span className="text-xs text-zinc-400 group-hover:text-blue-500 transition-colors font-medium">Explore Processes →</span>
+                                <p className="text-xs text-text-secondary leading-relaxed mb-6">{c.desc}</p>
+                                <span className="text-xs text-text-secondary group-hover:text-blue-500 transition-colors font-medium">Explore Processes →</span>
                             </button>
                         ))}
                     </div>
                 </section>
             </div>
 
-            <footer className="border-t border-zinc-900 py-12 text-center bg-[#0A0A0A]">
+            <footer className="border-t border-border-color py-12 text-center bg-bg-page">
                 <span className="font-bold text-sm tracking-tight text-white block">PaperTrail</span>
                 <span className="text-xs text-zinc-600 mt-2 block font-mono">Built for transparency · Powered by citizen collaboration</span>
             </footer>

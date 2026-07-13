@@ -22,10 +22,10 @@ export default function Browse() {
     }, [state, category]);
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-zinc-100">
+        <div className="min-h-screen bg-bg-page text-text-primary">
             <Header />
             <div className="max-w-6xl mx-auto px-6 md:px-10 py-16">
-                <div className="label-mono text-zinc-500 mb-3">Browse · {state}</div>
+                <div className="label-mono text-text-secondary mb-3">Browse · {state}</div>
                 <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight mb-8">
                     {category ? category : "All documents"}
                 </h1>
@@ -41,7 +41,7 @@ export default function Browse() {
                 )}
 
                 {loading ? (
-                    <div className="text-zinc-500">Loading directory…</div>
+                    <div className="text-text-secondary">Loading directory…</div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {docs.map((d, i) => (
@@ -49,19 +49,19 @@ export default function Browse() {
                                 key={d.id}
                                 data-testid={`browse-doc-${d.id}`}
                                 onClick={() => nav(`/doc/${d.id}`)}
-                                className="bg-[#161616] border border-zinc-800 hover:border-zinc-700 p-6 rounded-lg text-left transition-all group animate-fade-up"
+                                className="bg-bg-card border border-border-color hover:border-zinc-700 p-6 rounded-lg text-left transition-all group animate-fade-up"
                                 style={{ animationDelay: `${i * 30}ms` }}
                             >
                                 <div className="flex items-center justify-between mb-4 gap-2">
-                                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">{d.category}</span>
+                                    <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider">{d.category}</span>
                                     <ConfidenceBadge level={d.confidence} />
                                 </div>
                                 <h3 className="font-bold text-lg text-white mb-2 group-hover:text-blue-500 transition-colors">{d.name}</h3>
-                                <p className="text-xs text-zinc-500 leading-relaxed mb-6 line-clamp-2">{d.department}</p>
+                                <p className="text-xs text-text-secondary leading-relaxed mb-6 line-clamp-2">{d.department}</p>
                                 
-                                <div className="border-t border-zinc-900 pt-4 flex justify-between items-center text-xs">
-                                    <span className="text-zinc-500 font-medium">{d.processing_time || "—"}</span>
-                                    <span className="text-zinc-400 group-hover:text-blue-500 transition-colors font-medium">Open →</span>
+                                <div className="border-t border-border-color pt-4 flex justify-between items-center text-xs">
+                                    <span className="text-text-secondary font-medium">{d.processing_time || "—"}</span>
+                                    <span className="text-text-secondary group-hover:text-blue-500 transition-colors font-medium">Open →</span>
                                 </div>
                             </button>
                         ))}

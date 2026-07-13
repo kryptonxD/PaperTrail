@@ -5,7 +5,15 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
+    :root, [data-theme="dark"] {
+        --bg-page: #050505;
+        --bg-card: #111111;
+        --text-primary: #ffffff;
+        --text-secondary: #8a8a8a;
+        --border-color: #222222;
+        --accent-blue: #3b82f6;
+        --bg-glass: rgba(22, 22, 22, 0.6);
+
         --background: 0 0% 0%;
         --foreground: 0 0% 95%;
         --card: 0 0% 4%;
@@ -27,17 +35,35 @@
         --ring: 213 100% 48%;
         --radius: 0.375rem;
     }
+
+    [data-theme="light"] {
+        --bg-page: #ffffff;
+        --bg-card: #f5f5f7;
+        --text-primary: #0a0a0a;
+        --text-secondary: #555555;
+        --border-color: #e2e2e2;
+        --accent-blue: #2563eb;
+        --bg-glass: rgba(255, 255, 255, 0.6);
+
+        --background: 0 0% 100%;
+        --foreground: 0 0% 4%;
+        --card: 0 0% 96%;
+        --card-foreground: 0 0% 4%;
+        --border: 240 5.9% 90%;
+        --primary: 213 100% 48%;
+    }
 }
 
 @layer base {
     * {
-        @apply border-zinc-900;
+        border-color: var(--border-color);
+        transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
     }
     html,
     body,
     #root {
-        background: #000000;
-        color: #ededed;
+        background: var(--bg-page);
+        color: var(--text-primary);
         min-height: 100vh;
     }
     body {
@@ -73,7 +99,9 @@
 
 @layer components {
     .glass {
-        @apply backdrop-blur-md bg-zinc-950/60 border border-zinc-900/80;
+        backdrop-filter: blur(12px);
+        background: var(--bg-glass);
+        border: 1px solid var(--border-color);
     }
     .blue-text {
         color: #0070f3;
@@ -91,7 +119,7 @@
         color: #888888;
     }
     .btn-gold {
-        background: #0070f3;
+        background: var(--accent-blue);
         color: #ffffff;
         font-weight: 500;
         letter-spacing: -0.01em;
@@ -101,29 +129,31 @@
         transition: all 200ms ease-out;
     }
     .btn-gold:hover {
-        background: #0060d0;
+        opacity: 0.9;
         box-shadow: 0 0 20px rgba(0, 112, 243, 0.25);
     }
     .btn-ghost-gold {
-        border: 1px solid #1f1f1f;
-        color: #ededed;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
         padding: 0.7rem 1.4rem;
         border-radius: 4px;
         transition: all 200ms ease-out;
         font-size: 0.85rem;
+        background: transparent;
     }
     .btn-ghost-gold:hover {
-        border-color: #333333;
-        background: rgba(255, 255, 255, 0.03);
+        border-color: var(--accent-blue);
+        background: var(--bg-card);
     }
     .card-lux {
-        background: #0a0a0a;
-        border: 1px solid #141414;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 6px;
         transition: all 250ms ease;
     }
     .card-lux:hover {
-        border-color: #222222;
-        background: #0d0d0d;
+        border-color: var(--accent-blue);
+        background: var(--bg-card);
+        opacity: 0.95;
     }
 }

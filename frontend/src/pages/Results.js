@@ -31,7 +31,7 @@ export default function Results() {
     const a = data?.answer;
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-zinc-100 pb-20">
+        <div className="min-h-screen bg-bg-page text-text-primary pb-20">
             <Header />
             <div className="max-w-5xl mx-auto px-6 md:px-10 py-12">
 
@@ -40,7 +40,7 @@ export default function Results() {
                 </div>
 
                 <div className="mb-12 flex flex-col gap-2">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Query</span>
+                    <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest">Query</span>
                     <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight" data-testid="result-query">
                         {q}
                     </h1>
@@ -80,7 +80,7 @@ export default function Results() {
 
                             <div className="space-y-6">
                                 {[1, 2, 3].map((i) => (
-                                    <div key={i} className="space-y-2 border-b border-zinc-900 pb-4">
+                                    <div key={i} className="space-y-2 border-b border-border-color pb-4">
                                         <Skeleton className="h-3 w-16 bg-blue-500/10" />
                                         <Skeleton className="h-5 w-full bg-zinc-900" />
                                     </div>
@@ -95,7 +95,7 @@ export default function Results() {
                     <div data-testid="result-answer" className="space-y-12 animate-fade-up">
                         <div className="flex items-center gap-3">
                             <ConfidenceBadge level={data.confidence} />
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Result for {state}</span>
+                            <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider">Result for {state}</span>
                         </div>
 
                         {/* Summary section (Borderless, separated by white space and clean typography size) */}
@@ -108,7 +108,7 @@ export default function Results() {
 
                         {/* Location Result (Sleek distinct accent-bordered highlight block) */}
                         {data.location_result && data.location_result.needed && (
-                            <div className="bg-[#161616] border border-zinc-800 border-l-4 border-blue-600 rounded-r-lg p-8" data-testid="result-location">
+                            <div className="bg-bg-card border border-border-color border-l-4 border-blue-600 rounded-r-lg p-8" data-testid="result-location">
                                 <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
 
                                     <span className="text-xs font-mono text-white uppercase tracking-wider">Physical Submission Location</span>
@@ -116,13 +116,13 @@ export default function Results() {
                                 </div>
                                 <div className="grid sm:grid-cols-2 gap-6">
                                     <div>
-                                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-1">Nearest Office / Address</span>
+                                        <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">Nearest Office / Address</span>
                                         <p className="text-sm text-zinc-300 leading-relaxed">{data.location_result.address}</p>
                                     </div>
                                     <div className="flex flex-col gap-4">
                                         {data.location_result.phone && (
                                             <div>
-                                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-1">Contact Info</span>
+                                                <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">Contact Info</span>
                                                 <p className="text-sm text-zinc-300">{data.location_result.phone}</p>
                                             </div>
                                         )}
@@ -167,7 +167,7 @@ export default function Results() {
 
                         {/* Required documents (No borders, simple bullet list) */}
                         {a.required_documents?.length > 0 && (
-                            <div className="pt-6 border-t border-zinc-950" data-testid="result-required-docs">
+                            <div className="pt-6 border-t border-border-color" data-testid="result-required-docs">
                                 <span className="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-6 block">Required documents</span>
                                 <ul className="grid md:grid-cols-2 gap-4">
                                     {a.required_documents.map((d, i) => (
@@ -181,11 +181,11 @@ export default function Results() {
                         )}
 
                         {a.tips?.length > 0 && (
-                            <div className="pt-6 border-t border-zinc-950" data-testid="result-tips">
-                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-4 block">Important Tips</span>
+                            <div className="pt-6 border-t border-border-color" data-testid="result-tips">
+                                <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest mb-4 block">Important Tips</span>
                                 <ul className="space-y-4">
                                     {a.tips.map((t, i) => (
-                                        <li key={i} className="text-sm md:text-base text-zinc-400 italic leading-relaxed">"{t}"</li>
+                                        <li key={i} className="text-sm md:text-base text-text-secondary italic leading-relaxed">"{t}"</li>
                                     ))}
                                 </ul>
                             </div>
@@ -193,15 +193,15 @@ export default function Results() {
 
                         {/* Related matches */}
                         {data.matches?.length > 0 && (
-                            <div className="pt-6 border-t border-zinc-900/60">
-                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-6 block">Related Processes</span>
+                            <div className="pt-6 border-t border-border-color/60">
+                                <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest mb-6 block">Related Processes</span>
                                 <div className="grid md:grid-cols-2 gap-4">
                                     {data.matches.slice(0, 4).map((m) => (
                                         <button
                                             key={m.id}
                                             data-testid={`related-doc-${m.id}`}
                                             onClick={() => nav(`/doc/${m.id}?q=${encodeURIComponent(q)}`)}
-                                            className="bg-[#161616] border border-zinc-800 hover:border-zinc-700 p-5 rounded text-left transition-all group flex flex-col justify-between"
+                                            className="bg-bg-card border border-border-color hover:border-zinc-700 p-5 rounded text-left transition-all group flex flex-col justify-between"
                                         >
                                             <div className="flex items-center justify-between gap-4 mb-3 w-full">
 
@@ -209,7 +209,7 @@ export default function Results() {
                                                 <ExternalLink className="w-4 h-4 text-zinc-600 group-hover:text-blue-500 transition-colors shrink-0" />
                                             </div>
                                             <div className="flex justify-between items-center w-full mt-2">
-                                                <span className="text-[10px] font-mono text-zinc-500 uppercase">{m.state} · {m.category}</span>
+                                                <span className="text-[10px] font-mono text-text-secondary uppercase">{m.state} · {m.category}</span>
                                                 <ConfidenceBadge level={m.confidence} />
                                             </div>
                                         </button>
@@ -238,8 +238,8 @@ export default function Results() {
 
 function FactCard({ label, value, testid }) {
     return (
-        <div className="py-4 border-b border-zinc-900" data-testid={testid}>
-            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-1">{label}</span>
+        <div className="py-4 border-b border-border-color" data-testid={testid}>
+            <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">{label}</span>
             <span className="text-zinc-200 text-sm font-medium leading-relaxed">{value || "—"}</span>
         </div>
     );

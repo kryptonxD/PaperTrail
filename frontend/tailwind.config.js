@@ -10,6 +10,12 @@ module.exports = {
                 mono: ["'JetBrains Mono'", "monospace"],
             },
             colors: {
+                "bg-page": "var(--bg-page)",
+                "bg-card": "var(--bg-card)",
+                "text-primary": "var(--text-primary)",
+                "text-secondary": "var(--text-secondary)",
+                "border-color": "var(--border-color)",
+                "accent-blue": "var(--accent-blue)",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
