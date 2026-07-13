@@ -661,6 +661,11 @@ async def delete_checklist(cid: str, request: Request):
     return {"ok": True}
 
 # ─── mount ─────────────────────────────────────────────────────────────────
+@app.get("/health")
+async def health_check():
+    """Lightweight health check endpoint for uptime monitoring to keep Render active."""
+    return {"status": "ok"}
+
 app.include_router(api)
 
 cors_origins_str = os.environ.get("CORS_ORIGINS") or os.environ.get("ALLOWED_ORIGINS") or ""
