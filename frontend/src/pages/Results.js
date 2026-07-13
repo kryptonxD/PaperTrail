@@ -50,15 +50,15 @@ export default function Results() {
                     <div className="space-y-12 animate-fade-up" data-testid="results-loading">
                         {/* Header details skeleton */}
                         <div className="flex items-center gap-3">
-                            <Skeleton className="h-6 w-32 bg-zinc-900" />
-                            <Skeleton className="h-4 w-40 bg-zinc-900" />
+                            <Skeleton className="h-6 w-32 bg-zinc-200 dark:bg-zinc-800" />
+                            <Skeleton className="h-4 w-40 bg-zinc-200 dark:bg-zinc-800" />
                         </div>
 
                         {/* Summary box skeleton */}
                         <div className="space-y-4">
                             <Skeleton className="h-4 w-24 bg-blue-500/10" />
-                            <Skeleton className="h-6 w-full bg-zinc-900" />
-                            <Skeleton className="h-6 w-3/4 bg-zinc-900" />
+                            <Skeleton className="h-6 w-full bg-zinc-200 dark:bg-zinc-800" />
+                            <Skeleton className="h-6 w-3/4 bg-zinc-200 dark:bg-zinc-800" />
                         </div>
 
                         {/* Grid: steps + side facts skeleton */}
@@ -68,10 +68,10 @@ export default function Results() {
                                 <div className="space-y-4">
                                     {[1, 2, 3, 4].map((i) => (
                                         <div key={i} className="flex gap-4 items-start">
-                                            <Skeleton className="h-8 w-8 rounded-full bg-zinc-900 shrink-0" />
+                                            <Skeleton className="h-8 w-8 rounded-full bg-zinc-200 dark:bg-zinc-800 shrink-0" />
                                             <div className="space-y-2 w-full">
-                                                <Skeleton className="h-4 w-full bg-zinc-900" />
-                                                <Skeleton className="h-4 w-5/6 bg-zinc-900" />
+                                                <Skeleton className="h-4 w-full bg-zinc-200 dark:bg-zinc-800" />
+                                                <Skeleton className="h-4 w-5/6 bg-zinc-200 dark:bg-zinc-800" />
                                             </div>
                                         </div>
                                     ))}
@@ -82,7 +82,7 @@ export default function Results() {
                                 {[1, 2, 3].map((i) => (
                                     <div key={i} className="space-y-2 border-b border-border-color pb-4">
                                         <Skeleton className="h-3 w-16 bg-blue-500/10" />
-                                        <Skeleton className="h-5 w-full bg-zinc-900" />
+                                        <Skeleton className="h-5 w-full bg-zinc-200 dark:bg-zinc-800" />
                                     </div>
                                 ))}
                             </div>

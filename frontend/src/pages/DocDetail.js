@@ -67,13 +67,13 @@ export default function DocDetail() {
                 <Header />
                 <div className="max-w-5xl mx-auto px-6 md:px-10 py-12 space-y-8 animate-fade-up">
                     {/* Back btn skeleton */}
-                    <Skeleton className="h-4 w-16 bg-zinc-900" />
+                    <Skeleton className="h-4 w-16 bg-zinc-200 dark:bg-zinc-800" />
                     
                     {/* Header info skeleton */}
                     <div className="space-y-3">
                         <Skeleton className="h-4 w-32 bg-blue-500/10" />
-                        <Skeleton className="h-10 w-2/3 bg-zinc-900" />
-                        <Skeleton className="h-6 w-24 bg-zinc-900" />
+                        <Skeleton className="h-10 w-2/3 bg-zinc-200 dark:bg-zinc-800" />
+                        <Skeleton className="h-6 w-24 bg-zinc-200 dark:bg-zinc-800" />
                     </div>
 
                     {/* Fact grid skeleton */}
@@ -81,7 +81,7 @@ export default function DocDetail() {
                         {[1, 2, 3, 4].map((i) => (
                             <div key={i} className="bg-bg-card border border-border-color p-5 space-y-2 rounded">
                                 <Skeleton className="h-3 w-12 bg-blue-500/10" />
-                                <Skeleton className="h-5 w-2/3 bg-zinc-900" />
+                                <Skeleton className="h-5 w-2/3 bg-zinc-200 dark:bg-zinc-800" />
                             </div>
                         ))}
                     </div>
@@ -89,18 +89,18 @@ export default function DocDetail() {
                     {/* Overview skeleton */}
                     <div className="bg-bg-card p-8 space-y-3 rounded border border-border-color">
                         <Skeleton className="h-4 w-20 bg-blue-500/10" />
-                        <Skeleton className="h-5 w-full bg-zinc-900" />
-                        <Skeleton className="h-5 w-5/6 bg-zinc-900" />
+                        <Skeleton className="h-5 w-full bg-zinc-200 dark:bg-zinc-800" />
+                        <Skeleton className="h-5 w-5/6 bg-zinc-200 dark:bg-zinc-800" />
                     </div>
 
                     {/* Steps list skeleton */}
                     <div className="space-y-4">
-                        <Skeleton className="h-6 w-48 bg-zinc-900" />
+                        <Skeleton className="h-6 w-48 bg-zinc-200 dark:bg-zinc-800" />
                         <div className="border border-border-color divide-y divide-zinc-900 rounded">
                             {[1, 2, 3, 4].map((i) => (
                                 <div key={i} className="flex gap-4 p-5">
-                                    <Skeleton className="h-4 w-4 bg-zinc-900" />
-                                    <Skeleton className="h-4 w-5/6 bg-zinc-900" />
+                                    <Skeleton className="h-4 w-4 bg-zinc-200 dark:bg-zinc-800" />
+                                    <Skeleton className="h-4 w-5/6 bg-zinc-200 dark:bg-zinc-800" />
                                 </div>
                             ))}
                         </div>
@@ -173,7 +173,7 @@ export default function DocDetail() {
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="text-xs font-mono text-text-secondary">{doneCount}/{steps.length} completed</span>
-                        <div className="w-40 h-1.5 bg-zinc-900 rounded-full overflow-hidden relative">
+                        <div className="w-40 h-1.5 bg-zinc-200 dark:bg-zinc-900 rounded-full overflow-hidden relative">
                             <div className="absolute inset-y-0 left-0 bg-blue-600 rounded-full" style={{ width: `${progress}%`, transition: "width 300ms ease-out" }} />
                         </div>
                     </div>

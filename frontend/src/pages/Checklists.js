@@ -76,7 +76,7 @@ export default function Checklists() {
                                     </button>
                                 </div>
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden relative">
+                                    <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-900 rounded-full overflow-hidden relative">
                                         <div className="absolute inset-y-0 left-0 bg-blue-600 rounded-full" style={{ width: `${pct}%`, transition: "width 300ms" }} />
                                     </div>
                                     <div className="text-xs font-mono text-text-secondary shrink-0">{done}/{cl.steps.length}</div>

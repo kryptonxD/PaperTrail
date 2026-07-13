@@ -100,7 +100,7 @@ export default function Home() {
                         Version 2.0 Live · Karnataka & Maharashtra
                     </div>
                     <div className="flex items-center justify-between gap-8 mb-8">
-                        <h1 className="flex-1 font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-white animate-fade-up" style={{ animationDelay: "80ms" }}>
+                        <h1 className="flex-1 font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-text-primary animate-fade-up" style={{ animationDelay: "80ms" }}>
                             Government paperwork,<br />
                             <span className="text-blue-500">decoded.</span>
                         </h1>
