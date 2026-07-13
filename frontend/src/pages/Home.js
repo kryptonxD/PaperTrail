@@ -4,6 +4,8 @@ import SearchBar from "@/components/papertrail/SearchBar";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { STATES } from "@/lib/api";
+import DocumentTrail from "@/components/DocumentTrail";
+
 
 const CATEGORIES = [
     { key: "Core Identity", label: "Identity", desc: "Aadhaar, PAN, Passport, Voter ID", icon: "identity" },
@@ -97,10 +99,13 @@ export default function Home() {
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                         Version 2.0 Live · Karnataka & Maharashtra
                     </div>
-                    <h1 className="font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-white mb-8 animate-fade-up" style={{ animationDelay: "80ms" }}>
-                        Government paperwork,<br />
-                        <span className="text-blue-500">decoded.</span>
-                    </h1>
+                    <div className="flex items-center justify-between gap-8 mb-8">
+                        <h1 className="flex-1 font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-white animate-fade-up" style={{ animationDelay: "80ms" }}>
+                            Government paperwork,<br />
+                            <span className="text-blue-500">decoded.</span>
+                        </h1>
+                        <DocumentTrail />
+                    </div>
                     <p className="text-base md:text-lg text-zinc-400 max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: "160ms" }}>
                         Search any official document process. Get clear, step-by-step checklists, verified fees, locations, and requirements without the government runaround.
                     </p>
