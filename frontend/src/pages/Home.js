@@ -125,7 +125,7 @@ export default function Home() {
                                 key={s}
                                 data-testid={`sample-query-${s.slice(0, 10)}`}
                                 onClick={() => nav(`/search?q=${encodeURIComponent(s)}`)}
-                                className="px-3 py-1.5 rounded bg-bg-card border border-border-color text-text-secondary hover:text-white hover:border-zinc-700 text-xs transition-colors"
+                                className="px-3 py-1.5 rounded bg-bg-card border border-border-color text-text-secondary hover:text-text-primary hover:border-border-color text-xs transition-colors"
                             >
                                 {s}
                             </button>
@@ -141,7 +141,7 @@ export default function Home() {
                                     key={s.code}
                                     data-testid={`state-chip-${s.code.toLowerCase()}`}
                                     onClick={() => setState(s.code)}
-                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-bg-card border border-border-color text-text-secondary hover:border-zinc-700 hover:text-zinc-200"}`}
+                                    className={`px-4.5 py-1.5 text-xs font-medium rounded transition-all ${state === s.code ? "bg-blue-600 border border-blue-600 text-white" : "bg-bg-card border border-border-color text-text-secondary hover:border-zinc-700 hover:text-text-primary"}`}
                                 >
                                     {s.label}
                                 </button>
@@ -161,7 +161,7 @@ export default function Home() {
                             { k: "Community Checked", v: "Enriched with real-world tips, wait times, and documents verified by other citizens." },
                         ].map((t, i) => (
                             <div key={i} className="animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
-                                <h3 className="font-semibold text-white text-base mb-2">{t.k}</h3>
+                                <h3 className="font-semibold text-text-primary text-base mb-2">{t.k}</h3>
                                 <p className="text-sm text-text-secondary leading-relaxed">{t.v}</p>
                             </div>
                         ))}
@@ -173,14 +173,14 @@ export default function Home() {
                     <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
                         <div>
                             <span className="text-xs text-blue-500 font-semibold uppercase tracking-widest mb-3 block">Civic Services Directory</span>
-                            <h2 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight leading-none">
+                            <h2 className="font-extrabold text-3xl md:text-5xl text-text-primary tracking-tight leading-none">
                                 Browse by category
                             </h2>
                         </div>
                         <Link 
                             to="/browse" 
                             data-testid="browse-all-link" 
-                            className="text-xs border border-zinc-805 bg-bg-card hover:bg-[#1c1c1c] text-zinc-300 px-4 py-2.5 rounded transition-all"
+                            className="text-xs border border-zinc-805 bg-bg-card hover:bg-[#1c1c1c] text-text-secondary px-4 py-2.5 rounded transition-all"
                         >
                             View all processes
                         </Link>
@@ -196,7 +196,7 @@ export default function Home() {
                                 style={{ animationDelay: `${i * 50}ms` }}
                             >
                                 {getCategoryIcon(c.icon)}
-                                <div className="font-bold text-lg text-white mb-2 group-hover:text-blue-500 transition-colors">{c.label}</div>
+                                <div className="font-bold text-lg text-text-primary mb-2 group-hover:text-blue-500 transition-colors">{c.label}</div>
                                 <p className="text-xs text-text-secondary leading-relaxed mb-6">{c.desc}</p>
                                 <span className="text-xs text-text-secondary group-hover:text-blue-500 transition-colors font-medium">Explore Processes →</span>
                             </button>
@@ -206,7 +206,7 @@ export default function Home() {
             </div>
 
             <footer className="border-t border-border-color py-12 text-center bg-bg-page">
-                <span className="font-bold text-sm tracking-tight text-white block">PaperTrail</span>
+                <span className="font-bold text-sm tracking-tight text-text-primary block">PaperTrail</span>
                 <span className="text-xs text-zinc-600 mt-2 block font-mono">Built for transparency · Powered by citizen collaboration</span>
             </footer>
         </div>

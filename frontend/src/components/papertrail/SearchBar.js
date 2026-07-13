@@ -25,7 +25,7 @@ export default function SearchBar({ initial = "", size = "hero" }) {
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder={hero ? "How do I update Aadhaar, register property, get caste certificate..." : "Search document process..."}
-                    className={`flex-1 bg-transparent outline-none text-white placeholder-zinc-500 text-sm md:text-base`}
+                    className={`flex-1 bg-transparent outline-none text-text-primary placeholder-text-secondary text-sm md:text-base`}
                 />
                 <button
                     type="submit"

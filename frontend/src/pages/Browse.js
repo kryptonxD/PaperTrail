@@ -26,7 +26,7 @@ export default function Browse() {
             <Header />
             <div className="max-w-6xl mx-auto px-6 md:px-10 py-16">
                 <div className="label-mono text-text-secondary mb-3">Browse · {state}</div>
-                <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight mb-8">
+                <h1 className="font-extrabold text-3xl md:text-5xl text-text-primary tracking-tight mb-8">
                     {category ? category : "All documents"}
                 </h1>
 
@@ -34,7 +34,7 @@ export default function Browse() {
                     <button 
                         data-testid="clear-category-btn" 
                         onClick={() => setSp({})} 
-                        className="mb-8 text-xs font-mono text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1.5"
+                        className="mb-8 text-xs font-mono text-blue-500 hover:text-accent-blue transition-colors flex items-center gap-1.5"
                     >
                         ← All categories
                     </button>
@@ -56,7 +56,7 @@ export default function Browse() {
                                     <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider">{d.category}</span>
                                     <ConfidenceBadge level={d.confidence} />
                                 </div>
-                                <h3 className="font-bold text-lg text-white mb-2 group-hover:text-blue-500 transition-colors">{d.name}</h3>
+                                <h3 className="font-bold text-lg text-text-primary mb-2 group-hover:text-blue-500 transition-colors">{d.name}</h3>
                                 <p className="text-xs text-text-secondary leading-relaxed mb-6 line-clamp-2">{d.department}</p>
                                 
                                 <div className="border-t border-border-color pt-4 flex justify-between items-center text-xs">

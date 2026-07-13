@@ -46,7 +46,7 @@ export default function Checklists() {
             <Header />
             <div className="max-w-5xl mx-auto px-6 md:px-10 py-12">
                 <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest mb-3 block">Your saved</span>
-                <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight mb-10">Checklists in progress</h1>
+                <h1 className="font-extrabold text-3xl md:text-5xl text-text-primary tracking-tight mb-10">Checklists in progress</h1>
 
                 {loading && <div className="text-text-secondary">Loading your checklists…</div>}
                 {!loading && items.length === 0 && (
@@ -64,7 +64,7 @@ export default function Checklists() {
                                 <div className="flex items-start justify-between mb-4 gap-4">
                                     <div>
                                         <div className="text-[10px] font-mono text-text-secondary uppercase mb-1">{cl.state}</div>
-                                        <h3 className="font-bold text-xl text-white tracking-tight">{cl.doc_name}</h3>
+                                        <h3 className="font-bold text-xl text-text-primary tracking-tight">{cl.doc_name}</h3>
                                         {cl.query && <div className="text-xs text-text-secondary mt-2 italic">"{cl.query}"</div>}
                                     </div>
                                     <button
@@ -90,7 +90,7 @@ export default function Checklists() {
                                                 onCheckedChange={() => toggle(cl, i)}
                                                 className="mt-0.5 border-zinc-700 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white"
                                             />
-                                            <span className={`text-sm text-zinc-200 ${s.done ? "line-through text-text-secondary" : ""}`}>{s.text}</span>
+                                            <span className={`text-sm text-text-primary ${s.done ? "line-through text-text-secondary" : ""}`}>{s.text}</span>
                                         </li>
                                     ))}
                                 </ul>

@@ -34,32 +34,32 @@ export default function Header() {
                         <div className="w-8 h-8 rounded flex items-center justify-center bg-bg-card border border-border-color text-white font-bold text-base transition-colors group-hover:border-blue-600">
                             P
                         </div>
-                        <span className="font-semibold text-lg text-white tracking-tight">PaperTrail</span>
+                        <span className="font-semibold text-lg text-text-primary tracking-tight">PaperTrail</span>
                     </Link>
 
                     <nav className="hidden md:flex items-center gap-6">
                         <Link 
                             to="/" 
-                            className={`text-sm transition-colors ${isCurrent("/") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/") ? "text-text-primary font-medium" : "text-text-secondary hover:text-text-primary"}`}
                         >
                             Home
                         </Link>
                         <Link 
                             to="/browse" 
-                            className={`text-sm transition-colors ${isCurrent("/browse") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/browse") ? "text-text-primary font-medium" : "text-text-secondary hover:text-text-primary"}`}
                         >
                             Browse
                         </Link>
                         <Link 
                             to="/vision" 
-                            className={`text-sm transition-colors ${isCurrent("/vision") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
+                            className={`text-sm transition-colors ${isCurrent("/vision") ? "text-text-primary font-medium" : "text-text-secondary hover:text-text-primary"}`}
                         >
                             Vision
                         </Link>
                         {user && (
                             <Link 
                                 to="/checklists" 
-                                className={`text-sm transition-colors ${isCurrent("/checklists") ? "text-white font-medium" : "text-text-secondary hover:text-white"}`}
+                                className={`text-sm transition-colors ${isCurrent("/checklists") ? "text-text-primary font-medium" : "text-text-secondary hover:text-text-primary"}`}
                             >
                                 Checklists
                             </Link>
@@ -76,7 +76,7 @@ export default function Header() {
                                 data-testid="state-selector"
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                className="bg-bg-card border border-border-color text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
+                                className="bg-bg-card border border-border-color text-text-secondary px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
                             >
                                 {STATES.map((s) => (
                                     <option key={s.code} value={s.code}>
@@ -90,7 +90,7 @@ export default function Header() {
                                 data-testid="language-selector"
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
-                                className="bg-bg-card border border-border-color text-zinc-300 px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
+                                className="bg-bg-card border border-border-color text-text-secondary px-2 py-1 rounded text-xs focus:border-blue-600 focus:outline-none cursor-pointer"
                             >
                                 {LANGUAGES.map((l) => (
                                     <option key={l.code} value={l.code}>
@@ -109,7 +109,7 @@ export default function Header() {
                             data-testid="theme-toggle"
                         >
                             {theme === "dark" ? (
-                                <Sun className="w-3.5 h-3.5 text-text-secondary hover:text-white" />
+                                <Sun className="w-3.5 h-3.5 text-text-secondary hover:text-text-primary" />
                             ) : (
                                 <Moon className="w-3.5 h-3.5 text-text-secondary hover:text-black" />
                             )}
@@ -119,7 +119,7 @@ export default function Header() {
                                 <button
                                     data-testid="my-checklists-btn"
                                     onClick={() => nav("/checklists")}
-                                    className="hidden sm:inline-block border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-zinc-300 text-xs px-3 py-1.5 rounded transition-all"
+                                    className="hidden sm:inline-block border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-text-secondary text-xs px-3 py-1.5 rounded transition-all"
                                 >
                                     My Checklists
                                 </button>
@@ -127,7 +127,7 @@ export default function Header() {
                                 <button
                                     data-testid="logout-btn"
                                     onClick={logout}
-                                    className="text-text-secondary hover:text-white text-xs transition-colors"
+                                    className="text-text-secondary hover:text-text-primary text-xs transition-colors"
                                 >
                                     Sign out
                                 </button>

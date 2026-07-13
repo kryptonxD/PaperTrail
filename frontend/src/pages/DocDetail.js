@@ -117,7 +117,7 @@ export default function DocDetail() {
                 <button 
                     data-testid="back-btn" 
                     onClick={() => nav(-1)} 
-                    className="flex items-center gap-2 text-text-secondary hover:text-zinc-300 text-xs font-mono mb-6 transition-colors"
+                    className="flex items-center gap-2 text-text-secondary hover:text-text-primary text-xs font-mono mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-3.5 h-3.5" /> BACK TO PREVIOUS
                 </button>
@@ -125,7 +125,7 @@ export default function DocDetail() {
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 pb-6 border-b border-border-color">
                     <div>
                         <div className="text-[10px] font-mono text-text-secondary uppercase tracking-widest mb-2">{doc.state} · {doc.category}</div>
-                        <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight" data-testid="doc-name">{doc.name}</h1>
+                        <h1 className="font-extrabold text-3xl md:text-5xl text-text-primary tracking-tight" data-testid="doc-name">{doc.name}</h1>
                         <div className="mt-4"><ConfidenceBadge level={doc.confidence} /></div>
                     </div>
                     <div className="flex flex-wrap gap-3">
@@ -135,7 +135,7 @@ export default function DocDetail() {
                                 href={doc.source_url} 
                                 target="_blank" 
                                 rel="noreferrer" 
-                                className="border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-zinc-300 text-xs px-4 py-2.5 rounded transition-all inline-flex items-center gap-2"
+                                className="border border-border-color bg-bg-card hover:bg-[#1c1c1c] text-text-secondary text-xs px-4 py-2.5 rounded transition-all inline-flex items-center gap-2"
                             >
                                 <ExternalLink className="w-3.5 h-3.5" /> Official portal
                             </a>
@@ -161,7 +161,7 @@ export default function DocDetail() {
                 {ans?.summary && (
                     <div className="py-2 mb-12">
                         <span className="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-3 block">Overview</span>
-                        <p className="font-semibold text-lg md:text-xl text-zinc-200 leading-relaxed">{ans.summary}</p>
+                        <p className="font-semibold text-lg md:text-xl text-text-primary leading-relaxed">{ans.summary}</p>
                     </div>
                 )}
 
@@ -169,7 +169,7 @@ export default function DocDetail() {
                 <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div>
                         <span className="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-1 block">Interactive checklist</span>
-                        <h3 className="font-extrabold text-xl md:text-2xl text-white tracking-tight">Your step-by-step plan</h3>
+                        <h3 className="font-extrabold text-xl md:text-2xl text-text-primary tracking-tight">Your step-by-step plan</h3>
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="text-xs font-mono text-text-secondary">{doneCount}/{steps.length} completed</span>
@@ -190,7 +190,7 @@ export default function DocDetail() {
                             />
                             <div className="flex gap-4 items-baseline flex-1">
                                 <span className="font-mono text-text-secondary text-xs font-semibold">{String(i + 1).padStart(2, "0")}</span>
-                                <span className={`text-zinc-200 text-sm md:text-base leading-relaxed ${s.done ? "line-through text-text-secondary" : ""}`}>{s.text}</span>
+                                <span className={`text-text-primary text-sm md:text-base leading-relaxed ${s.done ? "line-through text-text-secondary" : ""}`}>{s.text}</span>
                             </div>
                         </li>
                     ))}
@@ -223,7 +223,7 @@ function Fact({ label, value }) {
     return (
         <div className="py-4 border-b border-border-color">
             <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1.5">{label}</span>
-            <span className="text-zinc-200 text-sm font-medium leading-relaxed">{value || "—"}</span>
+            <span className="text-text-primary text-sm font-medium leading-relaxed">{value || "—"}</span>
         </div>
     );
 }

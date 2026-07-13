@@ -41,7 +41,7 @@ export default function Results() {
 
                 <div className="mb-12 flex flex-col gap-2">
                     <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest">Query</span>
-                    <h1 className="font-extrabold text-3xl md:text-5xl text-white tracking-tight" data-testid="result-query">
+                    <h1 className="font-extrabold text-3xl md:text-5xl text-text-primary tracking-tight" data-testid="result-query">
                         {q}
                     </h1>
                 </div>
@@ -101,7 +101,7 @@ export default function Results() {
                         {/* Summary section (Borderless, separated by white space and clean typography size) */}
                         <div className="py-2">
                             <span className="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-3 block">Summary</span>
-                            <p className="font-semibold text-xl md:text-2xl text-zinc-200 leading-relaxed" data-testid="result-summary">
+                            <p className="font-semibold text-xl md:text-2xl text-text-primary leading-relaxed" data-testid="result-summary">
                                 {a.summary}
                             </p>
                         </div>
@@ -111,19 +111,19 @@ export default function Results() {
                             <div className="bg-bg-card border border-border-color border-l-4 border-blue-600 rounded-r-lg p-8" data-testid="result-location">
                                 <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
 
-                                    <span className="text-xs font-mono text-white uppercase tracking-wider">Physical Submission Location</span>
+                                    <span className="text-xs font-mono text-text-primary uppercase tracking-wider">Physical Submission Location</span>
                                     <ConfidenceBadge level={data.location_result.confidence} />
                                 </div>
                                 <div className="grid sm:grid-cols-2 gap-6">
                                     <div>
                                         <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">Nearest Office / Address</span>
-                                        <p className="text-sm text-zinc-300 leading-relaxed">{data.location_result.address}</p>
+                                        <p className="text-sm text-text-primary leading-relaxed">{data.location_result.address}</p>
                                     </div>
                                     <div className="flex flex-col gap-4">
                                         {data.location_result.phone && (
                                             <div>
                                                 <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">Contact Info</span>
-                                                <p className="text-sm text-zinc-300">{data.location_result.phone}</p>
+                                                <p className="text-sm text-text-primary">{data.location_result.phone}</p>
                                             </div>
                                         )}
                                         {data.location_result.portal_link && (
@@ -151,7 +151,7 @@ export default function Results() {
                                     {(a.steps || []).map((s, i) => (
                                         <li key={i} className="flex gap-5 items-start">
                                             <span className="font-mono text-blue-500 text-sm font-semibold pt-1 w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
-                                            <span className="text-zinc-300 text-sm md:text-base leading-relaxed">{s}</span>
+                                            <span className="text-text-primary text-sm md:text-base leading-relaxed">{s}</span>
                                         </li>
                                     ))}
                                 </ol>
@@ -171,7 +171,7 @@ export default function Results() {
                                 <span className="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-6 block">Required documents</span>
                                 <ul className="grid md:grid-cols-2 gap-4">
                                     {a.required_documents.map((d, i) => (
-                                        <li key={i} className="flex items-start gap-2.5 text-zinc-300 text-sm">
+                                        <li key={i} className="flex items-start gap-2.5 text-text-primary text-sm">
                                             <span className="text-blue-500 font-semibold">•</span>
                                             <span>{d}</span>
                                         </li>
@@ -205,7 +205,7 @@ export default function Results() {
                                         >
                                             <div className="flex items-center justify-between gap-4 mb-3 w-full">
 
-                                                <h4 className="font-bold text-zinc-200 group-hover:text-blue-500 transition-colors text-sm">{m.name}</h4>
+                                                <h4 className="font-bold text-text-primary group-hover:text-blue-500 transition-colors text-sm">{m.name}</h4>
                                                 <ExternalLink className="w-4 h-4 text-zinc-600 group-hover:text-blue-500 transition-colors shrink-0" />
                                             </div>
                                             <div className="flex justify-between items-center w-full mt-2">
@@ -240,7 +240,7 @@ function FactCard({ label, value, testid }) {
     return (
         <div className="py-4 border-b border-border-color" data-testid={testid}>
             <span className="text-[10px] font-mono text-text-secondary uppercase tracking-wider block mb-1">{label}</span>
-            <span className="text-zinc-200 text-sm font-medium leading-relaxed">{value || "—"}</span>
+            <span className="text-text-primary text-sm font-medium leading-relaxed">{value || "—"}</span>
         </div>
     );
 }

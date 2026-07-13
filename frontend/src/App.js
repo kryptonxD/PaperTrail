@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { AppProvider } from "@/context/AppContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import ScrollToTop from "@/components/ScrollToTop";
 import Home from "@/pages/Home";
 import Results from "@/pages/Results";
 import DocDetail from "@/pages/DocDetail";
@@ -16,6 +17,7 @@ export default function App() {
         <ThemeProvider>
             <AppProvider>
                 <BrowserRouter>
+                    <ScrollToTop />
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/search" element={<Results />} />

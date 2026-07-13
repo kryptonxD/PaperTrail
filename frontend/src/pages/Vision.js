@@ -54,7 +54,7 @@ export default function Vision() {
                 {/* Intro Section */}
                 <div className="mb-20 max-w-2xl">
                     <span className="text-xs text-blue-500 font-semibold uppercase tracking-widest mb-3 block">Product Vision</span>
-                    <h1 className="font-extrabold text-4xl md:text-6xl text-white tracking-tight leading-tight mb-6">
+                    <h1 className="font-extrabold text-4xl md:text-6xl text-text-primary tracking-tight leading-tight mb-6">
                         Roadmap
                     </h1>
                     <p className="text-text-secondary text-base md:text-lg leading-relaxed">
@@ -78,7 +78,7 @@ export default function Vision() {
                                 </div>
                             </div>
                             
-                            <h2 className="font-bold text-xl md:text-2xl text-white mb-3 tracking-tight group-hover:text-blue-500 transition-colors">
+                            <h2 className="font-bold text-xl md:text-2xl text-text-primary mb-3 tracking-tight group-hover:text-blue-500 transition-colors">
                                 {item.title}
                             </h2>
                             <p className="text-sm md:text-base text-text-secondary leading-relaxed max-w-2xl">
