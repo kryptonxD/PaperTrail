@@ -694,6 +694,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
 @app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     """Lightweight health check endpoint for uptime monitoring to keep Render active."""
