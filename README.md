@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📄 PaperTrail
+# 📄 PaperTrail ([Click Me](https://paper-trail-mvp.vercel.app/))
 
 ### Building the AI Operating System for Bureaucracy
 
