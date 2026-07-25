@@ -258,7 +258,7 @@ PaperTrail/
 
 AI Product Management • RAG • Prompt Engineering • Civic Tech
 
-- 🌐 Portfolio: https://ritik-barnwal.netlify.app/
+- 🌐 Portfolio: https://ritikx-portfolio.netlify.app/
 - 💼 LinkedIn: https://www.linkedin.com/in/barnwal-ritik/
 - 📧 Email: ritikbarnwla028@gmail.com
 
