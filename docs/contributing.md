@@ -27,14 +27,28 @@ Maintainers must manually review each Pull Request:
 
 ## 3. Reindexing Flow
 
-After merging the Pull Request, the new notes must be indexed into ChromaDB. 
+After merging the Pull Request, the new notes must be embedded into the vector store.
 
 - **Automatic (GitHub Actions)**:
-  Our `.github/workflows/reindex.yml` runs on every merge to `main` that touches `community-notes/`. It spins up a runner, installs backend dependencies, and executes `python scripts/reindex_notes.py`.
+  `.github/workflows/reindex.yml` runs on every merge to `main` that touches
+  `community-notes/`. It spins up a runner, installs backend dependencies, and executes
+  `python scripts/reindex_notes.py`.
 
 - **Manual (Local CLI)**:
-  If running locally or seeding manually, a developer can run:
   ```bash
   python scripts/reindex_notes.py
   ```
-  The script parses the markdown files, generates embeddings using `all-MiniLM-L6-v2`, and upserts them into ChromaDB as a document of type `community_note` (tagged with `is_community_note: True` and confidence `PARTIALLY VERIFIED`).
+  The script parses each markdown file into fields, builds a single combined chunk per
+  note, embeds it with `all-MiniLM-L6-v2`, and tags it `is_community_note: True` with
+  category `Community Note` and confidence `PARTIALLY VERIFIED` — so community knowledge
+  is always visually distinguishable from maintainer-verified official data.
+
+> ⚠️ **Known issue — this path is currently broken.**
+> `reindex_notes.py` still calls `collection.upsert(...)`, an API that existed when the
+> project used ChromaDB. Retrieval has since moved to a pickled NumPy store, and
+> `get_collection()` now returns a `MockCollection` exposing only `count()` — so the
+> script raises `AttributeError` and the Action fails on merge.
+>
+> Until it is fixed, community notes will merge but will **not** become searchable. The
+> fix is to have the script load `vector_store.pkl`, append the note chunks, and re-pickle
+> it — reusing the write path in `backend/ingest.py`.

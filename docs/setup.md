@@ -22,11 +22,21 @@ Make sure you have the following installed on your local machine:
    DB_NAME=papertrail
    GROQ_API_KEY=your_groq_api_key
    GROQ_MODEL=llama-3.3-70b-versatile
+   GEMINI_API_KEY=your_gemini_api_key
    TAVILY_KEYS=your_tavily_key_1,your_tavily_key_2
    SUPABASE_URL=https://your-supabase-project.supabase.co
    SUPABASE_ANON_KEY=your_supabase_anon_key
    CORS_ORIGINS=http://localhost:3000
+   DEV_MODE=true
    ```
+
+   `GROQ_API_KEY`, `SUPABASE_URL`, and `SUPABASE_ANON_KEY` are **required** — the server
+   exits at startup if any is missing. `GEMINI_API_KEY` (LLM fallback) and `TAVILY_KEYS`
+   (web fallback + office lookup) are optional; without them those features degrade
+   quietly rather than failing.
+
+   With `DEV_MODE=true`, each session is capped at 20 searches so a stray loop can't burn
+   your free-tier quota. Set it to `false` in production.
 3. Fill in the values in `frontend/.env`:
    ```ini
    REACT_APP_BACKEND_URL=http://localhost:8000
@@ -38,19 +48,38 @@ Make sure you have the following installed on your local machine:
 
 ## 3. Backend Setup
 
-1. Open a terminal and navigate to the `backend/` directory:
+All backend commands are run **from the repository root**, not from inside `backend/`.
+
+1. Create and activate a virtual environment:
    ```bash
-   cd backend
+   python -m venv venv
    ```
+   Then `venv\Scripts\activate` on Windows, or `source venv/bin/activate` on macOS/Linux.
+
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install -r backend/requirements.txt
    ```
-3. Start the FastAPI server:
+
+3. **Build the vector store.** This step is required — the server does *not* ingest
+   documents at startup. It reads a prebuilt store and logs a critical error if it's
+   missing or empty.
    ```bash
-   uvicorn server:app --host 127.0.0.1 --port 8000 --reload
+   python backend/scripts/build_vector_store.py
    ```
-   *Note: On startup, if the ChromaDB vector database is empty, the server will automatically ingest the 82 documents from `data/karnataka.json` and `data/maharashtra.json`.*
+   This loads the 82 documents from `backend/data/karnataka.json` and
+   `backend/data/maharashtra.json`, splits each into 3 chunks, embeds all 246 chunks with
+   `all-MiniLM-L6-v2`, and writes `backend/data/vector_store.pkl`. The first run downloads
+   the ONNX model (~90MB) and takes a minute or two; later runs are fast.
+
+   Re-run it whenever you change the source JSON files.
+
+4. Start the FastAPI server **from the repository root** (imports are absolute on the
+   `backend` package, so running from inside `backend/` will fail):
+   ```bash
+   uvicorn backend.server:app --host 127.0.0.1 --port 8000 --reload
+   ```
+   Confirm it came up with `curl http://127.0.0.1:8000/health`.
 
 ---
 
@@ -74,8 +103,10 @@ Make sure you have the following installed on your local machine:
 
 ## 5. Running Automated Tests
 
-To run the backend test suite, run:
+Install the dev dependencies, then run the backend suite from the repository root:
 ```bash
-cd backend
-pytest tests/backend_test.py
+pip install -r backend/requirements-dev.txt
+```
+```bash
+pytest backend/tests/backend_test.py
 ```

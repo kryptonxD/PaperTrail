@@ -89,9 +89,14 @@ credentials.json
 *.key
 .credentials
 
-# Local databases and ChromaDB data
+# Local databases and legacy ChromaDB data
 backend/data/chroma/
 backend/scratch/
+
+# Internal/private documents — these have held plaintext credentials.
+# Keep working notes out of the repo; use a password manager instead.
+*.docx
+*.doc
 
 
 

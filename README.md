@@ -8,7 +8,7 @@ AI-powered government workflow intelligence that transforms fragmented public in
 
 ![Status](https://img.shields.io/badge/Status-In%20Development-blue)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](https://makeapullrequest.com/)
 
@@ -86,13 +86,16 @@ Checklist + Community Notes
 
 | Layer | Technology |
 |--------|------------|
-| Frontend | React, TypeScript, Tailwind CSS |
-| Backend | FastAPI |
-| AI | Groq |
-| Database | MongoDB |
-| Vector Store | ChromaDB |
+| Frontend | React 19 (CRA + CRACO), Tailwind CSS, Radix UI |
+| Backend | FastAPI (Python 3.12) |
+| LLM | Groq `llama-3.3-70b-versatile`, with Gemini fallback |
+| Embeddings | `all-MiniLM-L6-v2` via fastembed (ONNX, CPU-local, no API cost) |
+| Vector Store | Prebuilt in-memory NumPy store (`backend/data/vector_store.pkl`) |
+| Web Fallback | Tavily Search (multi-key rotation) |
+| Database | MongoDB (Motor async driver) |
+| Auth | Supabase (Google OAuth) |
 | Architecture | Retrieval-Augmented Generation (RAG) |
-| Deployment | Netlify + Render |
+| Deployment | Vercel (frontend) + Render (backend) |
 
 ---
 
@@ -222,10 +225,15 @@ to
 
 and configure:
 
-- `GROQ_API_KEY`
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `MONGO_URL`
+- `GROQ_API_KEY` — required, the app exits at startup without it
+- `SUPABASE_URL` — required
+- `SUPABASE_ANON_KEY` — required
+- `MONGO_URL` — checklists and sessions
+- `TAVILY_KEYS` — optional, comma-separated; enables web fallback and office lookup
+- `GEMINI_API_KEY` — optional, LLM fallback when Groq fails
+
+See [`docs/setup.md`](docs/setup.md) for the full walkthrough, including building the
+vector store before first run.
 
 Finally,
 
@@ -240,13 +248,20 @@ Finally,
 
 ```text
 PaperTrail/
-
-├── frontend/
 ├── backend/
-├── community-notes/
-├── knowledge-base/
-├── prompts/
-├── docs/
+│   ├── server.py            # FastAPI app: search, auth, checklists, translation
+│   ├── retriever.py         # Cosine-similarity retrieval over the vector store
+│   ├── embeddings.py        # fastembed / all-MiniLM-L6-v2 wrapper
+│   ├── ingest.py            # Chunking + embedding + store build
+│   ├── data/                # Karnataka & Maharashtra JSON + vector_store.pkl
+│   └── scripts/
+│       └── build_vector_store.py
+├── frontend/
+│   └── src/                 # Pages, components, context, lib
+├── community-notes/         # Citizen-contributed notes + TEMPLATE.md
+├── scripts/
+│   └── reindex_notes.py     # Re-embeds merged community notes
+├── docs/                    # Architecture, confidence system, setup, contributing
 └── README.md
 ```
 

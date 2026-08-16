@@ -1,49 +1,60 @@
 # PaperTrail — PRD
 
+> Status: reflects the V2 codebase as of 2026-08-16.
+> For technical detail see [`docs/architecture.md`](../docs/architecture.md).
+
 ## Original problem statement
-Build PaperTrail — an AI-powered app that helps Indian citizens navigate government paperwork (Aadhaar, PAN, certificates, property, vehicle, business processes) with personalized, step-by-step guidance based on state and situation. RAG pipeline over verified process data (Karnataka + Maharashtra, 82 docs), confidence indicators (Verified/Partially Verified/Unverified), silent web fallback via Tavily, 15-language support, interactive saveable checklists, Google auth, premium regal design.
 
-## User choices (Feb 2026)
-- LLM: Groq (primary) + translation via LLM
-- Embeddings: skipped — used BM25 retrieval over 82 docs (small corpus, fast, free)
-- Web fallback: Tavily with 4-key rotation
-- Auth: Supabase Auth
-- Languages: 15 Indian languages via LLM translation on-the-fly
-- States live: Karnataka, Maharashtra
+Build PaperTrail — an AI-powered app that helps Indian citizens navigate government
+paperwork (Aadhaar, PAN, certificates, property, vehicle, business processes) with
+personalized, step-by-step guidance based on state and situation. RAG pipeline over
+verified process data, confidence indicators (Verified / Partially Verified / Unverified),
+silent web fallback, 15-language support, interactive saveable checklists, Google auth.
 
-## Architecture
-### Backend (FastAPI, `/app/backend/server.py`)
-- Data: `data/karnataka.json` + `data/maharashtra.json` loaded at boot, indexed with BM25 (`rank_bm25`)
-- `/api/search` — BM25 retrieval → LLM generation → structured JSON answer + confidence
-- `/api/documents`, `/api/documents/{id}` — browse and detail
-- `/api/translate` — LLM translation
-- `/api/auth/session|me|logout` — Supabase Google OAuth exchange
-- `/api/checklists` (GET/POST/PATCH/DELETE) — user checklists in Mongo
-- `/api/meta` — states, categories, languages
-- Silent Tavily fallback when BM25 top score < 2.0
+The product thesis: citizens don't hate government processes, they hate *uncertainty*.
+Success is measured in unnecessary office visits prevented — not queries served.
 
-### Frontend (React, TailwindCSS + shadcn UI)
-- Design: dark navy #0B101E, gold #D4AF37 accents, Cormorant Garamond serif + Outfit sans
-- Pages: `/` Home (hero + categories), `/search` Results, `/doc/:id` Detail (interactive checklist), `/browse` Category browse, `/checklists` Saved, `/auth/callback` OAuth handler
-- Global state: `AppContext` (state, language, user)
-- Confidence badges: Emerald / Gold / Maroon
+## Key decisions
 
-## Implemented (Feb 2026)
-- Full RAG search pipeline with silent Tavily fallback
-- 82 documents indexed (Karnataka + Maharashtra)
-- Confidence indicators on every result
+| Area | Decision | Rationale |
+| :--- | :--- | :--- |
+| LLM | Groq `llama-3.3-70b-versatile`, Gemini fallback | Free tier, fast. Fallback added after Groq rate limits caused user-visible failures. |
+| Embeddings | `all-MiniLM-L6-v2` via fastembed (ONNX) | Local, no API cost. fastembed over sentence-transformers to avoid a ~2GB PyTorch dep that broke Render's free tier. |
+| Vector store | Pickled NumPy store, cosine scan | ChromaDB was tried and dropped — its memory footprint exceeded Render free tier, and 246 vectors scan in under a millisecond. |
+| Web fallback | Tavily, 4-key rotation, gov domains only | Free-tier quota stretching. Triggers silently below 0.35 similarity. |
+| Auth | Supabase Google OAuth → session cookie | Replaced the Emergent OAuth proxy. |
+| Languages | 15 Indian languages, LLM translation on demand | No translation vendor needed. |
+| States live | Karnataka, Maharashtra | 41 documents each, 82 total. |
+
+## V2 scope — delivered
+
+- Emergent platform branding and OAuth proxy fully removed
+- Real embedding-based retrieval replacing V1's BM25 keyword search
+- 82 documents → 246 chunks (3 per doc: steps / required docs / fees+office)
+- Office location lookup with an anti-hallucination extraction prompt and its own
+  independent confidence label
+- Community Notes: template, PR flow, reindex script, GitHub Action
+- Rate limiting, input validation, prompt-injection sanitization, `.env.example`
 - Interactive saveable checklists with progress tracking
-- Google login (Supabase Auth)
-- 15-language translation
-- Category browsing
-- Premium regal UI matching brief
+- 15-language translation, category browsing, light/dark theming
+- `/docs` covering architecture, confidence system, contributing, setup
 
-## Deferred (P1/P2)
-- Community-contributions layer (schema-ready)
-- More states (schema is state-agnostic — add JSON + BM25 reindex)
-- Embeddings-based retrieval if corpus grows > few thousand docs
-- Full offline caching / PWA
-- Sharing checklists
+## Known gaps
 
-## Next
-- Test end-to-end and iterate
+- **Community-note reindexing is broken.** `scripts/reindex_notes.py` still targets the
+  removed ChromaDB API; notes merge but never become searchable. See
+  [`docs/contributing.md`](../docs/contributing.md).
+- Rate limiting is per-process in memory — resets on redeploy, needs Redis for multi-worker.
+- Retrieval is a linear scan; fine at 246 chunks, needs a real index past a few thousand.
+- Vector store must be rebuilt and committed manually before deploy.
+
+## Roadmap (not built)
+
+- **V2+** — More states, hybrid retrieval + reranking, internal dashboard for reviewing
+  community contributions at scale
+- **V3** — Full category coverage in more cities, WhatsApp search and reminders, proactive
+  renewal notifications
+- **V4** — Department and office transparency: which office and authority is accountable
+- **V5** — National coverage, AI voice support, new-city notifications
+- **V6+** — Banking and financial processes (explicitly deferred; not core to the civic-tech
+  identity)
