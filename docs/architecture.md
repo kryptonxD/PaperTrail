@@ -129,9 +129,5 @@ graph TD
 
 ## 6. Known Gaps
 
-- `scripts/reindex_notes.py` calls `collection.upsert(...)`, but `get_collection()` now
-  returns a `MockCollection` exposing only `count()`. The community-note reindex path was
-  not migrated when Chroma was removed, so the GitHub Action will fail on merge. Fixing
-  this means rewriting the script to append to `vector_store.pkl` via `ingest.py`.
 - Rate-limit and DEV_MODE counters are per-process in-memory dicts; they reset on restart
   and would need Redis to survive multiple workers.

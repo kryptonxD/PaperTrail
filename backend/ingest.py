@@ -6,6 +6,31 @@ from backend.retriever import get_collection, STORE_PATH
 
 logger = logging.getLogger("papertrail.ingest")
 
+def load_store() -> List[Dict[str, Any]]:
+    """Read the persisted vector store, or an empty list if it does not exist yet."""
+    if not STORE_PATH.exists():
+        return []
+    with open(STORE_PATH, "rb") as f:
+        return pickle.load(f)
+
+
+def save_store(store: List[Dict[str, Any]]) -> None:
+    """Persist the vector store and refresh the copy the retriever serves from."""
+    STORE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(STORE_PATH, "wb") as f:
+        pickle.dump(store, f)
+    from backend.retriever import load_vector_store
+    load_vector_store()
+
+
+def upsert_chunks(chunks: List[Dict[str, Any]]) -> int:
+    """Add or replace chunks by id, leaving every other chunk in the store untouched."""
+    incoming = {c["id"] for c in chunks}
+    kept = [c for c in load_store() if c["id"] not in incoming]
+    save_store(kept + chunks)
+    return len(chunks)
+
+
 def make_steps_chunk(d: Dict[str, Any]) -> str:
     parts = [
         f"Document Name: {d.get('name', '')}",
@@ -96,12 +121,6 @@ def ingest_documents(docs: List[Dict[str, Any]]):
             "embedding": emb
         })
         
-    STORE_PATH.parent.mkdir(parents=True, exist_ok=True)
     logger.info(f"Saving {len(vector_store)} chunks to custom vector store at {STORE_PATH}...")
-    with open(STORE_PATH, "wb") as f:
-        pickle.dump(vector_store, f)
-        
-    # Reload the custom vector store in retriever
-    from backend.retriever import load_vector_store
-    load_vector_store()
+    save_store(vector_store)
     logger.info("Ingestion completed successfully.")

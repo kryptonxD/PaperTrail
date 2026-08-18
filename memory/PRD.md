@@ -41,9 +41,6 @@ Success is measured in unnecessary office visits prevented — not queries serve
 
 ## Known gaps
 
-- **Community-note reindexing is broken.** `scripts/reindex_notes.py` still targets the
-  removed ChromaDB API; notes merge but never become searchable. See
-  [`docs/contributing.md`](../docs/contributing.md).
 - Rate limiting is per-process in memory — resets on redeploy, needs Redis for multi-worker.
 - Retrieval is a linear scan; fine at 246 chunks, needs a real index past a few thousand.
 - Vector store must be rebuilt and committed manually before deploy.

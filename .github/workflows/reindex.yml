@@ -6,10 +6,18 @@ on:
       - main
     paths:
       - 'community-notes/**'
+  workflow_dispatch:
+
+# Serialise runs so two quickly-merged notes cannot race on the same index file.
+concurrency:
+  group: reindex-community-notes
+  cancel-in-progress: false
 
 jobs:
   reindex:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -26,13 +34,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
+      # No secrets needed: reindexing only embeds text locally via fastembed.
       - name: Run reindex script
-        env:
-          MONGO_URL: ${{ secrets.MONGO_URL }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          TAVILY_KEYS: ${{ secrets.TAVILY_KEYS }}
+        run: python scripts/reindex_notes.py
+
+      # The runner is destroyed after this job, so the rebuilt index has to be
+      # committed back or the reindex has no effect on the deployed app.
+      # This commit touches only backend/data/, which is outside this workflow's
+      # `paths` filter, so it cannot retrigger the workflow.
+      - name: Commit updated vector store
         run: |
-          python scripts/reindex_notes.py
+          if git diff --quiet -- backend/data/vector_store.pkl; then
+            echo "Vector store unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/data/vector_store.pkl
+          git commit -m "chore: reindex community notes into vector store [skip ci]"
+          git push

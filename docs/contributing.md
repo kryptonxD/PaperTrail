@@ -43,12 +43,11 @@ After merging the Pull Request, the new notes must be embedded into the vector s
   category `Community Note` and confidence `PARTIALLY VERIFIED` — so community knowledge
   is always visually distinguishable from maintainer-verified official data.
 
-> ⚠️ **Known issue — this path is currently broken.**
-> `reindex_notes.py` still calls `collection.upsert(...)`, an API that existed when the
-> project used ChromaDB. Retrieval has since moved to a pickled NumPy store, and
-> `get_collection()` now returns a `MockCollection` exposing only `count()` — so the
-> script raises `AttributeError` and the Action fails on merge.
+> **Idempotent by design.** Every note is regenerated from its markdown on each run, so
+> editing a note refreshes it and deleting a note removes it from the index. Official
+> document chunks are never touched. The script refuses to run if the official chunks are
+> missing, so it can't publish an index containing only community notes.
 >
-> Until it is fixed, community notes will merge but will **not** become searchable. The
-> fix is to have the script load `vector_store.pkl`, append the note chunks, and re-pickle
-> it — reusing the write path in `backend/ingest.py`.
+> The workflow commits the rebuilt `backend/data/vector_store.pkl` back to `main` — without
+> that step the runner would be destroyed and the reindex would have no effect on the
+> deployed app.
