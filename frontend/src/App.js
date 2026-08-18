@@ -11,6 +11,7 @@ import AuthCallback from "@/pages/AuthCallback";
 import Browse from "@/pages/Browse";
 import Vision from "@/pages/Vision";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
     return (
@@ -39,6 +40,7 @@ export default function App() {
                             },
                         }}
                     />
+                    <Analytics />
                 </BrowserRouter>
             </AppProvider>
         </ThemeProvider>
