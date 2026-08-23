@@ -20,6 +20,7 @@ log_memory("1. Before any imports (Start of server.py)")
 import json
 import re
 import uuid
+import asyncio
 import logging
 import itertools
 import hashlib
@@ -499,17 +500,39 @@ async def search(req: SearchRequest, request: Request):
         '  "tips": ["helpful tip 1", "tip 2"]  // 2-3 practical tips\n'
         "}\nReturn ONLY the JSON."
     )
-    try:
-        raw = await llm_call(system, user_msg)
-        raw = raw.strip()
-        if raw.startswith("```"):
-            raw = re.sub(r"^```(?:json)?\n?|\n?```$", "", raw).strip()
-        answer = json.loads(raw)
-    except Exception as e:
-        logger.error(f"LLM parse failed: {e}")
-        answer = {"summary": "We couldn't structure a full answer just now. Here's what we know:", "steps": [], "required_documents": [], "fees": "", "processing_time": "", "office_or_portal": "", "tips": []}
-        if hits:
-            answer["steps"] = [f"Refer to {hits[0]['name']} process at {hits[0]['portal']}"]
+    async def _generate_answer():
+        try:
+            raw = (await llm_call(system, user_msg)).strip()
+            if raw.startswith("```"):
+                raw = re.sub(r"^```(?:json)?\n?|\n?```$", "", raw).strip()
+            return json.loads(raw)
+        except Exception as e:
+            logger.error(f"LLM parse failed: {e}")
+            fallback = {"summary": "We couldn't structure a full answer just now. Here's what we know:", "steps": [], "required_documents": [], "fees": "", "processing_time": "", "office_or_portal": "", "tips": []}
+            if hits:
+                fallback["steps"] = [f"Refer to {hits[0]['name']} process at {hits[0]['portal']}"]
+            return fallback
+
+    # The office lookup needs only the top hit, so it does not have to wait
+    # for answer generation. Each leg makes its own LLM call, and running
+    # them serially was dominating search latency.
+    tasks = [_generate_answer()]
+    if hits:
+        tasks.append(get_office_location(hits[0], req.query, req.state or hits[0]["state"]))
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    answer = results[0]
+    if isinstance(answer, BaseException):
+        logger.error(f"Answer generation failed: {answer}")
+        answer = {"summary": "We couldn't structure a full answer just now.", "steps": [], "required_documents": [], "fees": "", "processing_time": "", "office_or_portal": "", "tips": []}
+
+    location_result = None
+    if hits:
+        loc = results[1]
+        if isinstance(loc, BaseException):
+            logger.error(f"Office location lookup failed: {loc}")
+        else:
+            location_result = loc
 
     # Confidence: highest confidence among top hits (or UNVERIFIED if web-only)
     if hits and hits[0]["_score"] >= 0.35:
@@ -519,10 +542,6 @@ async def search(req: SearchRequest, request: Request):
     else:
         confidence = "UNVERIFIED"
 
-    # Location lookup
-    location_result = None
-    if hits:
-        location_result = await get_office_location(hits[0], req.query, req.state or hits[0]["state"])
 
     return {
         "answer": answer,
