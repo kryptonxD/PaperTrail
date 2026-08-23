@@ -1,0 +1,99 @@
+{
+  "_comment": "Retrieval regression set. 'expect' is the document name that must rank first. 'absent' cases are documents the corpus does not contain: they must NOT clear the confidence threshold, so the app falls back to web search instead of answering confidently from a near-miss record.",
+  "present": [
+    {
+      "q": "how do I update my aadhaar address",
+      "state": "Karnataka",
+      "expect": "Aadhaar Card"
+    },
+    {
+      "q": "what documents do I need for a caste certificate",
+      "state": "Maharashtra",
+      "expect": "Caste Certificate"
+    },
+    {
+      "q": "driving licence renewal",
+      "state": "Maharashtra",
+      "expect": "Driving Licence (DL)"
+    },
+    {
+      "q": "register my shop business",
+      "state": "Karnataka",
+      "expect": "Shop and Establishment Registration"
+    },
+    {
+      "q": "apply for pan card",
+      "state": "Karnataka",
+      "expect": "PAN Card"
+    },
+    {
+      "q": "passport application process",
+      "state": "Maharashtra",
+      "expect": "Passport"
+    },
+    {
+      "q": "income certificate",
+      "state": "Karnataka",
+      "expect": "Income Certificate"
+    },
+    {
+      "q": "ration card apply",
+      "state": "Maharashtra",
+      "expect": "Ration Card"
+    },
+    {
+      "q": "shop and establishment registration",
+      "state": "Uttar Pradesh",
+      "expect": null
+    },
+    {
+      "q": "caste certificate",
+      "state": "Bihar",
+      "expect": null
+    },
+    {
+      "q": "land record copy",
+      "state": "Rajasthan",
+      "expect": null
+    },
+    {
+      "q": "vehicle registration certificate",
+      "state": "Karnataka",
+      "expect": "Vehicle Registration Certificate (RC)"
+    }
+  ],
+  "absent": [
+    {
+      "q": "birth certificate",
+      "state": "Uttar Pradesh"
+    },
+    {
+      "q": "birth certificate",
+      "state": "Karnataka"
+    },
+    {
+      "q": "marriage certificate",
+      "state": "Bihar"
+    },
+    {
+      "q": "legal heir certificate",
+      "state": "Rajasthan"
+    },
+    {
+      "q": "mgnrega job card",
+      "state": "Bihar"
+    },
+    {
+      "q": "scholarship for sc st students",
+      "state": "Uttar Pradesh"
+    },
+    {
+      "q": "how to get a divorce",
+      "state": "Karnataka"
+    },
+    {
+      "q": "book a train ticket",
+      "state": "Bihar"
+    }
+  ]
+}

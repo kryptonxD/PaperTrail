@@ -11,6 +11,7 @@ from typing import List, Dict, Any, Optional
 import numpy as np
 
 from backend.embeddings import get_embeddings
+from backend.grounding import annotate
 
 logger = logging.getLogger("papertrail.retriever")
 
@@ -151,4 +152,4 @@ def retrieve(query: str, state: Optional[str] = None, top_k: int = 5) -> List[Di
         })
         if len(docs) >= top_k:
             break
-    return docs
+    return annotate(query, docs)

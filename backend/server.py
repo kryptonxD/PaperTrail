@@ -465,8 +465,19 @@ async def search(req: SearchRequest, request: Request):
     hits = search_docs(query, req.state, top_k=5)
     top_score = hits[0]["_score"] if hits else 0
 
-    # Silent fallback threshold
-    use_web = top_score < 0.35
+    # A hit that shares no identifying word with the query is not trustworthy no
+    # matter how high it scores - "birth certificate" scores 0.48 against "Caste
+    # Certificate" purely because both are certificates. Treat it as a miss so
+    # the request falls back to the web rather than answering from the wrong
+    # record with full confidence.
+    top_grounded = bool(hits) and hits[0].get("_grounded", True)
+    if hits and not top_grounded:
+        logger.info(
+            "Top hit %r is not lexically grounded in query %r (score %.3f); "
+            "falling back to web search.", hits[0]["name"], query, top_score
+        )
+
+    use_web = top_score < 0.35 or not top_grounded
     web = None
     if use_web:
         web = await tavily_search(query, req.state or "India")
@@ -573,7 +584,7 @@ async def search(req: SearchRequest, request: Request):
             location_result = loc
 
     # Confidence: highest confidence among top hits (or UNVERIFIED if web-only)
-    if hits and hits[0]["_score"] >= 0.35:
+    if hits and hits[0]["_score"] >= 0.35 and top_grounded:
         confidence = hits[0]["confidence"]
     elif hits:
         confidence = "PARTIALLY VERIFIED"
@@ -585,7 +596,7 @@ async def search(req: SearchRequest, request: Request):
         "answer": answer,
         "confidence": confidence,
         "matches": [{"id": d["id"], "name": d["name"], "state": d["state"], "category": d["category"], "confidence": d["confidence"], "score": d["_score"]} for d in hits],
-        "primary_doc_id": hits[0]["id"] if hits and hits[0]["_score"] >= 0.35 else None,
+        "primary_doc_id": hits[0]["id"] if hits and hits[0]["_score"] >= 0.35 and top_grounded else None,
         "location_result": location_result,
     }
 
