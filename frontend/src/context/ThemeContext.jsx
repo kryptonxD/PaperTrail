@@ -1,20 +1,21 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useLayoutEffect, useState } from "react";
 
 const ThemeCtx = createContext(null);
 
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("papertrail-theme") || "dark";
+        const saved = localStorage.getItem("papertrail-theme");
+        if (saved === "light" || saved === "dark") return saved;
+        return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     });
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
-        if (theme === "dark") {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
+        document.documentElement.classList.toggle("dark", theme === "dark");
         localStorage.setItem("papertrail-theme", theme);
+
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        themeMeta?.setAttribute("content", theme === "dark" ? "#0c1411" : "#f4f0e7");
     }, [theme]);
 
     function toggleTheme() {
@@ -22,7 +23,7 @@ export function ThemeProvider({ children }) {
     }
 
     return (
-        <ThemeCtx.Provider value={{ theme, toggleTheme }}>
+        <ThemeCtx.Provider value={{ theme, setTheme, toggleTheme }}>
             {children}
         </ThemeCtx.Provider>
     );

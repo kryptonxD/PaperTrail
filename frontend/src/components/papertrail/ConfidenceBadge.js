@@ -3,33 +3,37 @@ import React from "react";
 export function ConfidenceBadge({ level, className = "" }) {
     const cfg = {
         VERIFIED: {
-            bg: "bg-emerald-50 dark:bg-emerald-950/40",
-            border: "border-emerald-200 dark:border-emerald-500/30",
-            text: "text-emerald-700 dark:text-emerald-400",
-            dot: "bg-emerald-600 dark:bg-emerald-500",
+            bg: "bg-emerald-50/80 dark:bg-emerald-950/30",
+            border: "border-emerald-700/25 dark:border-emerald-300/25",
+            text: "text-emerald-800 dark:text-emerald-200",
+            dot: "bg-emerald-700 dark:bg-emerald-300",
             label: "Verified",
+            description: "Checked against an official source.",
         },
         "PARTIALLY VERIFIED": {
-            bg: "bg-amber-50 dark:bg-amber-950/40",
-            border: "border-amber-200 dark:border-amber-500/30",
-            text: "text-amber-700 dark:text-amber-400",
-            dot: "bg-amber-600 dark:bg-amber-500",
+            bg: "bg-amber-50/80 dark:bg-amber-950/30",
+            border: "border-amber-700/25 dark:border-amber-300/25",
+            text: "text-amber-800 dark:text-amber-200",
+            dot: "bg-amber-700 dark:bg-amber-300",
             label: "Partially Verified",
+            description: "Some details are checked; confirm the rest at the linked source.",
         },
         UNVERIFIED: {
-            bg: "bg-red-50 dark:bg-red-950/40",
-            border: "border-red-200 dark:border-red-500/30",
-            text: "text-red-700 dark:text-red-400",
-            dot: "bg-red-600 dark:bg-red-500",
+            bg: "bg-rose-50/80 dark:bg-rose-950/25",
+            border: "border-rose-700/25 dark:border-rose-300/25",
+            text: "text-rose-800 dark:text-rose-200",
+            dot: "bg-rose-700 dark:bg-rose-300",
             label: "Unverified",
+            description: "Not yet checked against an official source.",
         },
     };
     const c = cfg[level] || cfg.UNVERIFIED;
     return (
         <span
-            data-testid={`confidence-${(c.label || "").toLowerCase().replace(" ", "-")}`}
-            className={`inline-flex items-center gap-2 px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded border ${c.border} ${c.bg} ${c.text} ${className}`}
-            style={{ boxShadow: "0 0 15px rgba(0, 112, 243, 0.04)" }}
+            data-testid={`confidence-${(c.label || "").toLowerCase().replace(/\s+/g, "-")}`}
+            className={`inline-flex min-h-8 items-center gap-2 rounded-full border px-3 py-1 text-xs leading-4 font-mono uppercase tracking-wider ${c.border} ${c.bg} ${c.text} ${className}`}
+            title={c.description}
+            aria-label={`${c.label}. ${c.description}`}
         >
             <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`}></span>
             {c.label}

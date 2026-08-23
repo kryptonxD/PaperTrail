@@ -1,93 +1,112 @@
 import React from "react";
+import { CheckCircle2, ListChecks, MapPin, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/papertrail/Header";
 
-const ROADMAP_ITEMS = [
+const METHOD = [
     {
-        tag: "Now — V1/V2",
-        status: "Live",
-        statusColor: "text-emerald-400 bg-emerald-950/40 border-emerald-500/20",
-        title: "Karnataka & Maharashtra Coverage",
-        desc: "RAG-powered search decoded directly from verified government guidelines, with active citizen feedback through GitHub-based community notes.",
+        number: "01",
+        title: "Start with the outcome",
+        text: "Ask in ordinary language. PaperTrail finds the closest public process without making you guess the department or form name first.",
+        Icon: ListChecks,
     },
     {
-        tag: "Next — V2",
-        status: "In Progress",
-        statusColor: "text-blue-400 bg-blue-950/40 border-blue-500/20",
-        title: "Expanding Coverage",
-        desc: "Adding more Indian states, building smarter and more accurate retrieval models, and releasing tools to manage and review community submissions at scale.",
+        number: "02",
+        title: "Make the route local",
+        text: "The guide is shaped around your selected state so the office, portal, documents and process reflect the right jurisdiction.",
+        Icon: MapPin,
     },
     {
-        tag: "Future — V3",
-        status: "Planned",
-        statusColor: "text-text-secondary bg-zinc-100 dark:bg-zinc-900/30 border-border-color/40",
-        title: "Every Process, Every City",
-        desc: "Full coverage across all civic process categories in major metropolitan cities. Introducing WhatsApp search capability, automated reminders, and proactive renewal notifications.",
+        number: "03",
+        title: "Keep evidence beside advice",
+        text: "Official links, confidence labels and review dates remain visible. Citizen tips are useful context, but never presented as official fact.",
+        Icon: ShieldCheck,
     },
-    {
-        tag: "Future — V4",
-        status: "Planned",
-        statusColor: "text-text-secondary bg-zinc-100 dark:bg-zinc-900/30 border-border-color/40",
-        title: "Real Accountability",
-        desc: "Moving beyond basic processes by identifying the exact government offices and specific authorities responsible, making public processes feel traceable rather than anonymous.",
-    },
-    {
-        tag: "Future — V5",
-        status: "Planned",
-        statusColor: "text-text-secondary bg-zinc-100 dark:bg-zinc-900/30 border-border-color/40",
-        title: "Every State, Every District",
-        desc: "Achieving national coverage across all Indian states and districts, integrating AI voice support, and sending notifications as new regions go live.",
-    },
-    {
-        tag: "Beyond",
-        status: "Exploring",
-        statusColor: "text-text-secondary bg-zinc-100 dark:bg-zinc-900/30 border-border-color/40",
-        title: "Expanding the Scope",
-        desc: "Exploring adjacent regulated domains like banking, insurance, and complex financial paperwork once the core civic-tech database is solid.",
-    },
+];
+
+const CONFIDENCE = [
+    ["Verified", "The guide has been checked against an official source."],
+    ["Partially verified", "Some details are sourced; the remaining points should be confirmed before submission."],
+    ["Unverified", "The information is a starting point and has not yet passed the source review."],
 ];
 
 export default function Vision() {
     return (
-        <div className="min-h-screen bg-bg-page text-text-primary pb-24">
+        <div className="min-h-screen bg-bg-page text-text-primary">
             <Header />
-            <div className="max-w-4xl mx-auto px-6 md:px-10 py-16">
-                {/* Intro Section */}
-                <div className="mb-20 max-w-2xl">
-                    <span className="text-xs text-blue-500 font-semibold uppercase tracking-widest mb-3 block">Product Vision</span>
-                    <h1 className="font-extrabold text-4xl md:text-6xl text-text-primary tracking-tight leading-tight mb-6">
-                        Roadmap
-                    </h1>
-                    <p className="text-text-secondary text-base md:text-lg leading-relaxed">
-                        PaperTrail today is the first step. Here's where it's headed.
+            <main id="main-content">
+                <section className="page-wrap grid gap-12 py-20 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:py-28">
+                    <div>
+                        <p className="utility-label text-accent-copper">How PaperTrail works</p>
+                        <h1 className="editorial-title mt-5 max-w-4xl text-6xl leading-[0.88] md:text-8xl">
+                            Public information, arranged around the person who needs it.
+                        </h1>
+                    </div>
+                    <p className="max-w-lg text-base leading-relaxed text-text-secondary lg:pb-2">
+                        Government instructions are often scattered across portals, circulars and office counters. PaperTrail turns that trail into one readable route—without hiding where the information came from.
                     </p>
-                </div>
+                </section>
 
-                {/* Vertical Timeline */}
-                <div className="relative pl-6 md:pl-8 border-l border-border-color/80 ml-2 space-y-16">
-                    {ROADMAP_ITEMS.map((item, i) => (
-                        <div key={i} className="relative group animate-fade-up" style={{ animationDelay: `${i * 100}ms` }}>
-                            {/* Dot indicator */}
-                            <div className="absolute -left-[31px] md:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-black border-2 border-blue-500 group-hover:bg-blue-500 transition-colors" />
+                <section className="border-y border-border-color bg-bg-card" aria-labelledby="method-title">
+                    <div className="page-wrap py-20 md:py-24">
+                        <div className="mb-12 max-w-2xl">
+                            <p className="utility-label text-accent-copper">The method</p>
+                            <h2 id="method-title" className="editorial-title mt-3 text-5xl leading-none md:text-6xl">A useful guide in three moves.</h2>
+                        </div>
 
-                            <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 mb-3">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-xs font-mono text-text-secondary uppercase tracking-widest">{item.tag}</span>
-                                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${item.statusColor}`}>
-                                        {item.status}
-                                    </span>
-                                </div>
+                        <ol className="grid gap-px border border-border-color bg-border-color lg:grid-cols-3">
+                            {METHOD.map(({ number, title, text, Icon }) => (
+                                <li key={number} className="bg-bg-card p-7 md:p-9">
+                                    <div className="flex items-center justify-between">
+                                        <span className="utility-label text-accent-copper">{number} / 03</span>
+                                        <Icon aria-hidden="true" className="h-5 w-5 text-accent-copper" strokeWidth={1.5} />
+                                    </div>
+                                    <h3 className="mt-10 text-xl font-semibold text-text-primary">{title}</h3>
+                                    <p className="body-copy mt-3 text-text-secondary">{text}</p>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+                </section>
+
+                <section className="page-wrap grid gap-14 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:py-28" aria-labelledby="confidence-title">
+                    <div>
+                        <p className="utility-label text-accent-copper">Confidence, explained</p>
+                        <h2 id="confidence-title" className="editorial-title mt-4 text-5xl leading-[0.95] md:text-6xl">A label is only useful if you know what it means.</h2>
+                        <p className="body-copy mt-5 max-w-md text-text-secondary">
+                            Confidence describes the source review—not whether an application will be approved. Your eligibility and the accepting office always make the final decision.
+                        </p>
+                    </div>
+
+                    <dl className="border-t border-border-strong">
+                        {CONFIDENCE.map(([term, detail], index) => (
+                            <div key={term} className="grid gap-4 border-b border-border-color py-7 sm:grid-cols-[3rem_0.55fr_1fr] sm:items-start">
+                                <span className="utility-label text-accent-copper">0{index + 1}</span>
+                                <dt className="font-semibold text-text-primary">{term}</dt>
+                                <dd className="body-copy text-text-secondary">{detail}</dd>
                             </div>
-                            
-                            <h2 className="font-bold text-xl md:text-2xl text-text-primary mb-3 tracking-tight group-hover:text-blue-500 transition-colors">
-                                {item.title}
-                            </h2>
-                            <p className="text-sm md:text-base text-text-secondary leading-relaxed max-w-2xl">
-                                {item.desc}
+                        ))}
+                    </dl>
+                </section>
+
+                <section className="border-t border-border-color bg-bg-elevated">
+                    <div className="page-wrap grid gap-10 py-16 md:grid-cols-[1fr_auto] md:items-center md:py-20">
+                        <div className="max-w-2xl">
+                            <p className="utility-label text-accent-copper">What PaperTrail is—and is not</p>
+                            <h2 className="editorial-title mt-3 text-4xl leading-none md:text-5xl">A clearer reading layer, not a government portal.</h2>
+                            <p className="body-copy mt-4 text-text-secondary">
+                                PaperTrail helps you prepare and navigate. It does not issue documents, decide eligibility or replace the official source. Every guide should lead you back to the relevant government portal or office for submission.
                             </p>
                         </div>
-                    ))}
-                </div>
-            </div>
+                        <div className="flex flex-col items-start gap-3 md:items-end">
+                            <span className="meta-copy inline-flex items-center gap-2 text-text-secondary">
+                                <CheckCircle2 aria-hidden="true" className="h-4 w-4 text-action" /> Karnataka and Maharashtra coverage
+                            </span>
+                            <Link to="/browse" className="btn-primary">Browse current guides</Link>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
     );
 }

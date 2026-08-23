@@ -22,20 +22,22 @@ export default function AuthCallback() {
     }, [loginWithAccessToken, nav]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="glass p-10 text-center">
+        <main id="main-content" className="grid min-h-screen place-items-center bg-bg-page px-6 text-text-primary">
+            <div className="surface-panel w-full max-w-md p-8 text-center sm:p-10">
+                <div className="brand-wordmark mb-7 text-3xl">PaperTrail<span className="brand-dot">.</span></div>
                 {err ? (
                     <>
-                        <div className="text-red-300 mb-4">{err}</div>
-                        <button onClick={() => nav("/")} className="btn-ghost-gold">Return home</button>
+                        <p className="utility-label text-accent-copper">Sign-in interrupted</p>
+                        <div className="body-copy mb-6 mt-3 text-text-secondary">{err}</div>
+                        <button type="button" onClick={() => nav("/")} className="btn-secondary">Return home</button>
                     </>
                 ) : (
-                    <div className="flex items-center gap-3 text-[#F5F2EA]">
-                        <Loader2 className="w-5 h-5 animate-spin text-gold" />
-                        <span className="label-mono text-gold">Signing you in…</span>
+                    <div className="flex items-center justify-center gap-3 text-text-primary" role="status">
+                        <Loader2 aria-hidden="true" className="h-5 w-5 animate-spin text-accent-copper" />
+                        <span className="utility-label text-accent-copper">Signing you in…</span>
                     </div>
                 )}
             </div>
-        </div>
+        </main>
     );
 }

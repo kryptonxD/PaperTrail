@@ -3,12 +3,35 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0B101E" />
-        <meta name="description" content="PaperTrail — AI-powered guidance for Indian government paperwork. Step-by-step plans for Aadhaar, PAN, property, licences and more." />
+        <meta name="theme-color" content="#f4f0e7" />
+        <meta name="description" content="PaperTrail turns Indian government processes into clear, source-backed steps, document lists, timelines, and checklists." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://paper-trail-mvp.vercel.app/" />
+        <meta property="og:title" content="PaperTrail — A Clear Path Through Public Paperwork" />
+        <meta property="og:description" content="Steps, documents, fees and official sources—arranged clearly." />
+        <meta property="og:image" content="https://paper-trail-mvp.vercel.app/og.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="PaperTrail brand card with a numbered path through public paperwork" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="PaperTrail — A Clear Path Through Public Paperwork" />
+        <meta name="twitter:description" content="Steps, documents, fees and official sources—arranged clearly." />
+        <meta name="twitter:image" content="https://paper-trail-mvp.vercel.app/og.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
-        <title>PaperTrail — Government Paperwork, Decoded</title>
+        <title>PaperTrail — A Clear Path Through Public Paperwork</title>
+        <script>
+            (() => {
+                try {
+                    const saved = localStorage.getItem("papertrail-theme");
+                    const theme = saved === "light" || saved === "dark"
+                        ? saved
+                        : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                    document.documentElement.dataset.theme = theme;
+                    document.documentElement.classList.toggle("dark", theme === "dark");
+                } catch {}
+            })();
+        </script>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
     </head>
     <body>
