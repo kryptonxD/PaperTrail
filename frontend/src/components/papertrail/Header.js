@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import { LANGUAGES, STATES } from "@/lib/api";
+import { LANGUAGES } from "@/lib/api";
 
 const NAV_ITEMS = [
     { to: "/", label: "Home" },
@@ -14,7 +14,7 @@ const NAV_ITEMS = [
 export default function Header() {
     const nav = useNavigate();
     const loc = useLocation();
-    const { state, setState, language, setLanguage, user, logout } = useApp();
+    const { state, setState, states, language, setLanguage, user, logout } = useApp();
     const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -74,7 +74,7 @@ export default function Header() {
                             className="preference-select"
                             aria-label="Select state"
                         >
-                            {STATES.map((item) => (
+                            {states.map((item) => (
                                 <option key={item.code} value={item.code}>{item.label}</option>
                             ))}
                         </select>
@@ -153,7 +153,7 @@ export default function Header() {
                             <label className="grid gap-1.5 text-sm leading-5 text-text-secondary">
                                 State
                                 <select value={state} onChange={(event) => setState(event.target.value)} className="preference-select w-full">
-                                    {STATES.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
+                                    {states.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
                                 </select>
                             </label>
                             <label className="grid gap-1.5 text-sm leading-5 text-text-secondary">

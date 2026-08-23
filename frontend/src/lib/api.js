@@ -48,6 +48,9 @@ export const LANGUAGES = [
     { code: "ne", name: "Nepali", native: "नेपाली" },
 ];
 
+// Fallback only. The live list comes from GET /api/meta via AppContext, so
+// adding a state to the backend corpus surfaces it in the UI with no frontend
+// change. This is what renders if that request fails.
 export const STATES = [
     { code: "Karnataka", label: "Karnataka" },
     { code: "Maharashtra", label: "Maharashtra" },

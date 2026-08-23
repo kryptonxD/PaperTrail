@@ -5,7 +5,6 @@ import GuidePreview from "@/components/papertrail/GuidePreview";
 import Header from "@/components/papertrail/Header";
 import SearchBar from "@/components/papertrail/SearchBar";
 import { useApp } from "@/context/AppContext";
-import { STATES } from "@/lib/api";
 
 const CATEGORIES = [
     { key: "Core Identity", label: "Identity", desc: "Aadhaar, PAN, passport and voter services", Icon: FileText },
@@ -33,7 +32,7 @@ const VALUE_POINTS = [
 
 export default function Home() {
     const nav = useNavigate();
-    const { state, setState } = useApp();
+    const { state, setState, states } = useApp();
 
     return (
         <div className="min-h-screen bg-bg-page text-text-primary">
@@ -73,7 +72,7 @@ export default function Home() {
 
                         <div className="mt-8 flex flex-wrap items-center gap-2 animate-fade-up" style={{ animationDelay: "300ms" }}>
                             <span className="utility-label mr-2">Guides for</span>
-                            {STATES.map((item) => (
+                            {states.map((item) => (
                                 <button
                                     key={item.code}
                                     type="button"
