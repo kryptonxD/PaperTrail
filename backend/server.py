@@ -125,7 +125,33 @@ def _load_state(fname: str, state: str) -> List[Dict[str, Any]]:
         docs.append(d)
     return docs
 
-ALL_DOCS: List[Dict[str, Any]] = _load_state("karnataka.json", "Karnataka") + _load_state("maharashtra.json", "Maharashtra")
+def _load_research(fname: str) -> List[Dict[str, Any]]:
+    """Load a converted research workbook, keeping only guide-grade records.
+
+    Directory-grade records are held back on purpose: their fee and required
+    document fields are empty because the official page never stated them, and
+    an empty fee in the answer context invites the model to invent one.
+    """
+    path = ROOT_DIR / "data" / "research" / fname
+    if not path.exists():
+        logger.warning(f"Research dataset not found: {path}")
+        return []
+    with open(path, "r", encoding="utf-8") as f:
+        rows = json.load(f)
+    return [r for r in rows if r.get("grade") == "guide"]
+
+
+ALL_DOCS: List[Dict[str, Any]] = (
+    _load_state("karnataka.json", "Karnataka")
+    + _load_state("maharashtra.json", "Maharashtra")
+    + _load_research("uttar_pradesh.json")
+    + _load_research("bihar.json")
+    + _load_research("rajasthan.json")
+)
+logger.info(
+    "Loaded %d documents across %d states.",
+    len(ALL_DOCS), len({d["state"] for d in ALL_DOCS}),
+)
 
 def search_docs(query: str, state: Optional[str] = None, top_k: int = 6) -> List[Dict[str, Any]]:
     return retrieve(query, state=state, top_k=top_k)
@@ -464,12 +490,20 @@ async def search(req: SearchRequest, request: Request):
             offline = sanitize_community_context(offline)
             required = sanitize_community_context(required)
             
+        # An absent field must read as absent. Emitting an empty value invites
+        # the model to supply a plausible number from its own training data,
+        # which is the one failure this product cannot afford.
+        NOT_PUBLISHED = "NOT PUBLISHED BY THE OFFICIAL SOURCE"
+        fee_txt = d.get("fee") or NOT_PUBLISHED
+        time_txt = d.get("processing_time") or NOT_PUBLISHED
+        req_txt = required or NOT_PUBLISHED
+
         ctx_docs_formatted.append(
             f"[DOC {i+1}] Name: {d['name']} | State: {d['state']} | Confidence: {d['confidence']}\n"
-            f"Dept: {d['department']} | Fee: {d['fee']} | Time: {d['processing_time']} | Portal: {d['portal']} | Source: {d['source_url']}\n"
+            f"Dept: {d['department']} | Fee: {fee_txt} | Time: {time_txt} | Portal: {d['portal']} | Source: {d['source_url']}\n"
             f"Online: {online}\n"
             f"Offline: {offline}\n"
-            f"Docs needed: {required}"
+            f"Docs needed: {req_txt}"
         )
         
     ctx_text = "\n\n".join(ctx_docs_formatted)
@@ -484,7 +518,11 @@ async def search(req: SearchRequest, request: Request):
         "Given a user query and reference process data, produce a personalized, step-by-step answer. "
         f"Respond ENTIRELY in {lang_name}. Use clear headings and numbered steps. "
         "Never mention 'context' or 'documents provided' or that you looked anything up. "
-        "Speak with authority and quiet confidence. If information is uncertain, phrase it carefully but do not disclaim sources."
+        "Speak with authority and quiet confidence. If information is uncertain, phrase it carefully but do not disclaim sources. "
+        "CRITICAL: never state a fee, processing time, or required document that is not present in the "
+        "reference data. Where a field is marked NOT PUBLISHED BY THE OFFICIAL SOURCE, say plainly that "
+        "the official source does not publish it and point the user to the portal to confirm. An honest "
+        "'not published' is always correct; a plausible invented figure never is, even if probably right."
     )
     user_msg = (
         f"USER QUERY: {req.query}\nSTATE: {req.state or 'not specified'}\n\n"
