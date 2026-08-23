@@ -59,6 +59,10 @@ Confidence is always expressed with text and color. Each badge includes a short 
 
 The complete row is a labelled click target. Each checkbox has a descriptive accessible name, progress uses a semantic progressbar, and completion is never communicated by color alone.
 
+### Future vision timeline
+
+Use the editorial roadmap only on the public Vision page. Every row combines an ordered stage, a written status, a plain-language title and a 16px explanation. Status must never rely on color alone, and future stages are framed as direction rather than guaranteed delivery dates.
+
 ### Navigation
 
 Desktop navigation keeps preferences visible. Mobile navigation uses a real menu containing routes, state, language and account actions; no critical control is hidden without an alternative.

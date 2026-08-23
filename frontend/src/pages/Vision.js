@@ -30,6 +30,39 @@ const CONFIDENCE = [
     ["Unverified", "The information is a starting point and has not yet passed the source review."],
 ];
 
+const ROADMAP = [
+    {
+        label: "Available now",
+        title: "Karnataka and Maharashtra",
+        text: "Guides grounded in official sources where available and strengthened by reviewed citizen corrections.",
+    },
+    {
+        label: "Building next",
+        title: "More states, stronger guidance",
+        text: "Expand state by state, improve how everyday questions find the right guide, and make community corrections easier to submit and review.",
+    },
+    {
+        label: "Planned",
+        title: "From search to follow-through",
+        text: "Build toward complete civic-process coverage in major cities, add WhatsApp access, and send useful reminders for deadlines and renewals.",
+    },
+    {
+        label: "Planned",
+        title: "Know who is responsible",
+        text: "Name the office and public authority behind each step, so people can see where a process sits and who is responsible for it.",
+    },
+    {
+        label: "Long-term",
+        title: "Every state. Every district.",
+        text: "Bring PaperTrail across India, add spoken guidance, and let people know when reviewed coverage reaches their area.",
+    },
+    {
+        label: "Exploring",
+        title: "Beyond civic services",
+        text: "Once the civic foundation is dependable, explore other essential services with complex paperwork, including banking, insurance and finance.",
+    },
+];
+
 export default function Vision() {
     return (
         <div className="min-h-screen bg-bg-page text-text-primary">
@@ -89,7 +122,43 @@ export default function Vision() {
                     </dl>
                 </section>
 
-                <section className="border-t border-border-color bg-bg-elevated">
+                <section className="border-y border-border-color bg-bg-card" aria-labelledby="future-vision-title">
+                    <div className="page-wrap py-20 md:py-28">
+                        <div className="mb-14 grid gap-7 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+                            <div>
+                                <p className="font-mono text-base font-medium uppercase leading-6 tracking-[0.12em] text-accent-copper">Future vision</p>
+                                <h2 id="future-vision-title" className="editorial-title mt-4 max-w-3xl text-5xl leading-[0.94] md:text-7xl">
+                                    Build trust first. Then widen the trail.
+                                </h2>
+                            </div>
+                            <p className="body-copy max-w-xl text-text-secondary lg:justify-self-end">
+                                PaperTrail’s ambition grows in stages: strengthen each guide, widen access, and expand only where the source trail can remain clear.
+                            </p>
+                        </div>
+
+                        <ol className="border-t border-border-strong">
+                            {ROADMAP.map(({ label, title, text }, index) => (
+                                <li
+                                    key={`${label}-${title}`}
+                                    className="grid gap-5 border-b border-border-color py-8 md:grid-cols-[7.5rem_minmax(0,0.82fr)_minmax(0,1.18fr)] md:gap-8 md:py-10"
+                                >
+                                    <span className="font-mono text-base font-medium leading-6 tracking-[0.12em] text-accent-copper">{String(index + 1).padStart(2, "0")} / 06</span>
+                                    <div>
+                                        <p className="font-mono text-base font-medium uppercase leading-6 tracking-[0.1em] text-text-secondary">{label}</p>
+                                        <h3 className="editorial-title mt-3 text-3xl leading-none md:text-4xl">{title}</h3>
+                                    </div>
+                                    <p className="body-copy max-w-2xl text-text-secondary">{text}</p>
+                                </li>
+                            ))}
+                        </ol>
+
+                        <p className="body-copy mt-7 max-w-3xl text-text-tertiary">
+                            This is a direction, not a dated release schedule. Each expansion depends on reliable sources and local review.
+                        </p>
+                    </div>
+                </section>
+
+                <section className="bg-bg-elevated">
                     <div className="page-wrap grid gap-10 py-16 md:grid-cols-[1fr_auto] md:items-center md:py-20">
                         <div className="max-w-2xl">
                             <p className="utility-label text-accent-copper">What PaperTrail is—and is not</p>
