@@ -101,3 +101,10 @@ backend/scratch/
 
 
 ".emergent/" 
+
+# scratch from local debugging
+/idx.html
+/main.js
+/page.html
+/search.json
+/up.json
