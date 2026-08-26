@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { toast } from "sonner";
 import { LANGUAGES } from "@/lib/api";
 
 const NAV_ITEMS = [
@@ -14,7 +15,7 @@ const NAV_ITEMS = [
 export default function Header() {
     const nav = useNavigate();
     const loc = useLocation();
-    const { state, setState, states, language, setLanguage, user, logout } = useApp();
+    const { state, setState, states, authAvailable, language, setLanguage, user, logout } = useApp();
     const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -24,6 +25,12 @@ export default function Header() {
         const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
         if (!supabaseUrl) {
             console.error("REACT_APP_SUPABASE_URL is not set.");
+            return;
+        }
+        // Without this check the browser navigates to a host that no longer
+        // resolves and the user lands on a dead page with no explanation.
+        if (!authAvailable) {
+            toast.error("Sign-in is unavailable right now. Browsing and search still work.");
             return;
         }
         const redirect = `${window.location.origin}/auth/callback`;
@@ -113,7 +120,7 @@ export default function Header() {
                                 {user.picture && <img src={user.picture} alt="" className="h-8 w-8 rounded-full border border-border-color" />}
                             </>
                         ) : (
-                            <button type="button" data-testid="login-btn" onClick={startLogin} className="btn-secondary min-h-0 h-10 px-4">
+                            <button type="button" data-testid="login-btn" onClick={startLogin} disabled={!authAvailable} title={authAvailable ? undefined : "Sign-in is temporarily unavailable"} className="btn-secondary min-h-0 h-10 px-4 disabled:cursor-not-allowed disabled:opacity-50">
                                 Sign in
                             </button>
                         )}
@@ -170,7 +177,7 @@ export default function Header() {
                                 <button type="button" onClick={logout} className="btn-secondary">Sign out</button>
                             </div>
                         ) : (
-                            <button type="button" onClick={startLogin} className="btn-secondary w-full">Sign in to save a checklist</button>
+                            <button type="button" onClick={startLogin} disabled={!authAvailable} className="btn-secondary w-full disabled:cursor-not-allowed disabled:opacity-50">{authAvailable ? "Sign in to save a checklist" : "Sign-in unavailable"}</button>
                         )}
                     </div>
                 </div>

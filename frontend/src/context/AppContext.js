@@ -8,6 +8,7 @@ export function AppProvider({ children }) {
     const [language, setLanguage] = useState(localStorage.getItem("pt_lang") || "en");
     const [user, setUser] = useState(null);
     const [states, setStates] = useState(STATES);
+    const [authAvailable, setAuthAvailable] = useState(true);
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
@@ -36,6 +37,9 @@ export function AppProvider({ children }) {
                 if (Array.isArray(meta?.states) && meta.states.length) {
                     setStates(meta.states.map((name) => ({ code: name, label: name })));
                 }
+                if (meta && typeof meta.auth_available === "boolean") {
+                    setAuthAvailable(meta.auth_available);
+                }
             } catch {
                 // keep the fallback list already in state
             }
@@ -58,7 +62,7 @@ export function AppProvider({ children }) {
     }
 
     return (
-        <AppCtx.Provider value={{ state, setState, states, language, setLanguage, user, setUser, loginWithAccessToken, logout, ready }}>
+        <AppCtx.Provider value={{ state, setState, states, authAvailable, language, setLanguage, user, setUser, loginWithAccessToken, logout, ready }}>
             {children}
         </AppCtx.Provider>
     );

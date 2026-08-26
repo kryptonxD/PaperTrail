@@ -91,6 +91,30 @@ if not GROQ_API_KEY or not SUPABASE_URL or not SUPABASE_ANON_KEY:
     import sys
     sys.exit(1)
 
+AUTH_AVAILABLE = True  # refreshed by the startup probe below
+
+
+async def probe_auth_provider() -> bool:
+    """Check that the Supabase project still exists.
+
+    A free-tier project that has been paused or removed stops resolving in DNS
+    entirely, and every sign-in then dies at the redirect with nothing to show
+    the user. Probing once at startup lets the API say so plainly instead.
+    """
+    global AUTH_AVAILABLE
+    try:
+        async with httpx.AsyncClient(timeout=10) as ac:
+            r = await ac.get(f"{SUPABASE_URL}/auth/v1/health")
+        AUTH_AVAILABLE = r.status_code < 500
+    except Exception as e:
+        AUTH_AVAILABLE = False
+        logger.error(
+            "Identity provider unreachable at %s (%s). Sign-in is disabled until "
+            "SUPABASE_URL points at a live project.", SUPABASE_URL, e,
+        )
+    return AUTH_AVAILABLE
+
+
 _groq = AsyncGroq(api_key=GROQ_API_KEY)
 
 log_memory("4. Before AsyncIOMotorClient initialization")
@@ -295,6 +319,7 @@ async def meta():
         "categories": CATEGORIES,
         "languages": [{"code": c, "name": n} for c, n in LANGUAGES.items()],
         "doc_count": len(ALL_DOCS),
+        "auth_available": AUTH_AVAILABLE,
     }
 
 @api.get("/documents")
@@ -625,13 +650,21 @@ class SupabaseTokenRequest(BaseModel):
 @api.post("/auth/session")
 async def auth_session(req: SupabaseTokenRequest, response: Response):
     """Exchange a Supabase access_token for our session_token."""
-    async with httpx.AsyncClient(timeout=15) as ac:
-        r = await ac.get(
-            f"{SUPABASE_URL}/auth/v1/user",
-            headers={
-                "Authorization": f"Bearer {req.access_token}",
-                "apikey": SUPABASE_ANON_KEY,
-            },
+    try:
+        async with httpx.AsyncClient(timeout=15) as ac:
+            r = await ac.get(
+                f"{SUPABASE_URL}/auth/v1/user",
+                headers={
+                    "Authorization": f"Bearer {req.access_token}",
+                    "apikey": SUPABASE_ANON_KEY,
+                },
+            )
+    except httpx.HTTPError as e:
+        logger.error("Identity provider unreachable during sign-in: %s", e)
+        raise HTTPException(
+            503,
+            "Sign-in is temporarily unavailable because the identity provider "
+            "cannot be reached. Browsing and search are unaffected.",
         )
     if r.status_code != 200:
         raise HTTPException(401, "invalid session")
@@ -779,6 +812,7 @@ app.include_router(api)
 @app.on_event("startup")
 async def startup():
     log_memory("6. FastAPI startup event triggered")
+    await probe_auth_provider()
     logger.info(f"Loaded GROQ_API_KEY at startup: {GROQ_API_KEY[:7]}...")
     try:
         from backend.retriever import get_collection, STORE_PATH
