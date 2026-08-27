@@ -361,38 +361,61 @@ STEP 3 — HARD RULES
    rural routes, say whether it is the block, tehsil or gram panchayat office.
 
 STEP 4 — OUTPUT
-Return one JSON object per process, using exactly these keys, with "" for
-anything not found on an official source:
 
-{
-  "Document / Service Name": "",
-  "Local / Regional Name": "",
-  "Government Level": "",
-  "Sector": "",
-  "Department": "",
-  "Issuing Authority": "",
-  "State": "",
-  "District / City Documented": "",
-  "Who Can Apply": "",
-  "Required Documents": "",
-  "Government Fee": "",
-  "Expected Processing Time": "",
-  "Validity": "",
-  "Application Method": "",
-  "Access Mode": "",
-  "Official Portal": "",
-  "Direct Application URL": "",
-  "Physical Office Name": "",
-  "Office Address": "",
-  "Primary Source URL": "",
-  "Secondary Source URL": "",
-  "Verification Status": "",
-  "Verification Notes": "",
-  "Date Researched": ""
-}
+Deliver ONE Excel file (.xlsx) named:
+  PaperTrail_[STATE]_Research_YYYY-MM-DD.xlsx
 
-Government Level must be one of: Central, Central / State, State,
+FORMATTING RULES — these matter, the file is parsed by a script:
+  - Column headers go in ROW 1. Do NOT put a title, record count or summary
+    banner above the header. Put those on the Coverage sheet instead.
+  - One row per process. Never merge cells. Never split a process across rows.
+  - Use the exact column names below, in this order, spelled exactly.
+  - An unknown value is an EMPTY CELL. Do not write "N/A", "-", "Not Verified"
+    or a sentence. Empty means "the official source does not publish this",
+    which the app states honestly. A filled cell means the app will repeat it.
+  - Plain text only. No formulas, no colour-coding as meaning, no footnotes.
+
+SHEET 1 — name it "Documents". Columns, in order:
+
+  Document / Service Name
+  Local / Regional Name
+  Government Level
+  Sector
+  Department
+  Issuing Authority
+  State
+  District / City Documented
+  Who Can Apply
+  Required Documents
+  Government Fee
+  Expected Processing Time
+  Validity
+  Application Method
+  Access Mode
+  Official Portal
+  Direct Application URL
+  Physical Office Name
+  Office Address
+  Primary Source URL
+  Secondary Source URL
+  Verification Status
+  Verification Notes
+  Date Researched
+
+Government Level must be exactly one of: Central, Central / State, State,
 District / Regional, Tehsil / Subdistrict, Urban Local Body, Rural Local Body.
+
+Verification Status must be exactly one of: VERIFIED, PARTIALLY VERIFIED,
+CONFLICTING, OUTDATED, NOT AVAILABLE IN STATE.
+
+SHEET 2 — name it "Coverage". Header in row 1:
+  Sector | Attempted | Completed with 2+ core fields | Marked unavailable
+
+SHEET 3 — name it "Gaps". Header in row 1:
+  Document / Service Name | What is missing | Where you looked | Why you stopped
+
+SHEET 4 — name it "Portals". The portal map from Step 1. Header in row 1:
+  Portal Name | Purpose | URL
 
 STEP 5 — SELF-CHECK BEFORE RETURNING
 State explicitly whether each of these passes. Fix any that fail, then re-check.

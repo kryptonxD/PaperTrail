@@ -134,17 +134,43 @@ def join(*parts: str, sep: str = " ") -> str:
     return sep.join(p for p in parts if p)
 
 
+KEY_COLUMN = "Document / Service Name"
+
+
+def find_header_row(rows: List[tuple], limit: int = 12) -> int:
+    """Locate the header row.
+
+    The research guide asks for headers in row 1, but earlier workbooks carried
+    a title and record-count banner above them. Detect the row holding the key
+    column rather than assuming a fixed offset, so both layouts import.
+    """
+    for i, row in enumerate(rows[:limit]):
+        if any(str(c).strip() == KEY_COLUMN for c in row if c is not None):
+            return i
+    raise ValueError(
+        f"Could not find a header row containing {KEY_COLUMN!r} in the first "
+        f"{limit} rows. Check the sheet follows docs/state-research-guide.md."
+    )
+
+
 def read_sheet(path: Path) -> List[Dict[str, str]]:
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
-    ws = wb[wb.sheetnames[0]]
-    rows = list(ws.iter_rows(min_row=4, values_only=True))
+    # The guide names the main sheet "Documents"; older workbooks used the
+    # state name, and it was always the first sheet.
+    ws = wb["Documents"] if "Documents" in wb.sheetnames else wb[wb.sheetnames[0]]
+    rows = list(ws.iter_rows(values_only=True))
     wb.close()
-    header = [h for h in rows[0]]
+
+    h = find_header_row(rows)
+    header = list(rows[h])
     out = []
-    for r in rows[1:]:
-        if not r or not r[0]:
+    for r in rows[h + 1:]:
+        if not r or not any(c not in (None, "") for c in r):
             continue
-        out.append({h: r[i] for i, h in enumerate(header) if h})
+        record = {col: r[i] for i, col in enumerate(header) if col}
+        if not str(record.get(KEY_COLUMN, "")).strip():
+            continue
+        out.append(record)
     return out
 
 
