@@ -2,10 +2,11 @@
 
 How to research a new state so the output can actually be used. Written after
 importing Uttar Pradesh, Bihar and Rajasthan, where **2,328 researched records
-yielded only 480 usable ones** — and the gap came from four avoidable habits,
-not from lack of effort.
+yielded only 480 usable ones** — and the gap came from avoidable habits, not
+from lack of effort.
 
-Give this document to whoever, or whatever, does the research.
+The prompt in [The complete agent prompt](#the-complete-agent-prompt) is
+self-contained: the only thing that changes between runs is the state name.
 
 ---
 
@@ -23,59 +24,56 @@ reaches a user.
 
 ---
 
-## The four rules
+## The five rules
 
 ### 1. Leave a field empty. Never explain why it is empty.
 
-This is the single most expensive habit from the last batch.
-
-These sentences were written into detail fields:
+The single most expensive habit from the last batch. These sentences were
+written into detail fields:
 
 > "No government fee indicated in the official approval catalogue"
 > "exact checklist not stated on the reviewed landing page"
 > "Fees, eligibility and required documents were not transcribed"
 
 Each is true, and each is worthless. Worse, each is *actively harmful*: an
-importer sees a filled field, an AI reading it sees prose where a document list
-should be, and a user receives a confident answer built on an absence.
+importer sees a filled field, a model reading it sees prose where a document
+list should be, and a user receives a confident answer built on an absence.
 
 **An empty cell is a correct and complete answer.** The app is built to say "the
 official source does not publish this" — but only when the cell is empty.
 
-> If you are about to type a sentence about what you could not find, stop and
-> leave the cell blank instead.
+### 2. Work the list. Do not choose your own.
 
-### 2. Forty complete records beat a thousand shells.
-
-Rajasthan has 1,316 records, of which 3 originally carried a fee *and* documents
-*and* a timeline. That is a list of service names, not a guide.
-
-Bihar has one fifth as many records and produced better coverage per hour spent.
-
-**Target 40 to 60 processes per state, fully filled.** When in doubt, stop adding
-rows and go deeper on the ones already there.
+Rajasthan returned 1,316 records because the researcher enumerated whatever a
+portal index happened to list. The result was deep in one sector and empty in
+others. [The master document list](#the-master-document-list) below is the
+scope. Attempt every row, and report the ones you could not complete.
 
 ### 3. The catalogue page is not the service page.
 
-This is why the detail was missing. The last batch was sourced from service
-*catalogues* — Nivesh Mitra's live-services PDF, Jan Soochna's A-Z index,
-Bihar's ServiceList.pdf. A catalogue confirms a service exists. It never carries
-fees or document checklists.
+The last batch was sourced from service *catalogues* — Nivesh Mitra's
+live-services PDF, Jan Soochna's A-Z index, Bihar's ServiceList.pdf. A catalogue
+confirms a service exists. It never carries fees or document checklists.
 
-The fee and the checklist live one or two clicks deeper: on the service's own
-page, in its citizen charter, or in a departmental fee notification.
-
-Symptom to watch for: in the last batch **532 records shared only 65 distinct
-URLs**, because the "direct application URL" was a portal homepage. If two
-records point at the same URL, neither is deep enough.
+Symptom: in the last batch **532 records shared only 65 distinct URLs**, because
+the "direct application URL" was a portal homepage. If two records point at the
+same URL, neither is deep enough.
 
 **Highest-leverage single move:** find the state's consolidated e-District or CSC
-**fee notification**. One document often carries the fee for dozens of citizen
-services at once — far cheaper than chasing them one at a time.
+**fee notification**. One document often carries fees for dozens of services.
 
-### 4. Fill these four fields above all others.
+### 4. Every state calls things something different.
 
-The app answers four questions. Everything else is secondary.
+This is what breaks research that is given only a state name. The land record of
+rights is *RTC / Pahani* in Karnataka, *7/12 Extract* in Maharashtra, *Khatauni*
+in Uttar Pradesh, *Jamabandi* in Rajasthan and *Khatiyan* in Bihar. An agent
+searching for "Land Record of Rights" in Bihar finds nothing and reports the
+document as unavailable — when it exists under another name.
+
+For every row, **search the local name first**, then the English one. The master
+list gives the known aliases.
+
+### 5. Fill these four fields above all others.
 
 | Field | The question it answers |
 | :--- | :--- |
@@ -85,8 +83,116 @@ The app answers four questions. Everything else is secondary.
 | `Who Can Apply` | Am I eligible? |
 
 A record with an official portal plus **two or more** of these is usable. With
-fewer, it becomes a directory entry — kept in the repository, but unable to
-answer anyone.
+fewer, it becomes a directory entry — kept, but unable to answer anyone.
+
+---
+
+## The master document list
+
+51 processes across 11 sectors. This is the full scope for any state.
+
+`Central` rows are identical nationwide: confirm the process is available in the
+state and record the national fee, but do not go hunting for a state-specific
+version. `Local` rows vary by municipal corporation in cities and by block or
+gram panchayat in rural areas — say which you documented.
+
+### Core Identity — 4 · Central
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 1 | Aadhaar Card | Enrolment and update. UIDAI, national fee |
+| 2 | PAN Card | Income Tax, national fee |
+| 3 | Voter ID (EPIC) | ECI rules, state CEO/ERO executes |
+| 4 | Passport | MEA. Note the state's PSK/POPSK locations |
+
+### Life Events — 4 · Local
+Highest query volume in India, and **missing from every state we currently hold.
+Research these first.**
+
+| # | Document | Common aliases |
+| --: | :--- | :--- |
+| 5 | Birth Certificate | Janma Praman Patra |
+| 6 | Death Certificate | Mrityu Praman Patra |
+| 7 | Marriage Certificate | Vivah Praman Patra; note Hindu Marriage Act vs Special Marriage Act routes |
+| 8 | Legal Heir / Succession Certificate | Varisu, Warisan, Uttaradhikar |
+
+### Welfare and Entitlement — 10 · State
+| # | Document | Common aliases |
+| --: | :--- | :--- |
+| 9 | Caste Certificate | Jati Praman Patra; SC/ST/OBC may be separate routes |
+| 10 | Income Certificate | Aay Praman Patra |
+| 11 | Domicile / Residence Certificate | Niwas / Mool Niwas Praman Patra |
+| 12 | EWS Certificate | Economically Weaker Section |
+| 13 | Ration Card | PDS; note APL/BPL/AAY categories |
+| 14 | BPL Card | May be merged into the ration card in some states |
+| 15 | Senior Citizen Card | |
+| 16 | Old Age / Widow Pension | Vridha / Vidhwa Pension; social security pension |
+| 17 | Post-Matric Scholarship | SC/ST/OBC/minority scholarship portals |
+| 18 | MGNREGA Job Card | NREGA; high volume in rural states |
+
+### Health — 3
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 19 | Ayushman Bharat / state health card | Named per state — AB-ArK in Karnataka, MJPJAY in Maharashtra. Find the local scheme |
+| 20 | Disability Certificate / UDID | Central scheme, state issuance |
+| 21 | Health Insurance Card | State employee or general scheme |
+
+### Property and Land — 8 · State and Local
+| # | Document | Common aliases |
+| --: | :--- | :--- |
+| 22 | Land Record of Rights | **RTC/Pahani (KA), 7/12 (MH), Khatauni (UP), Jamabandi (RJ), Khatiyan (BR)** |
+| 23 | Mutation | Dakhil Kharij, Namantaran, Intekal |
+| 24 | Encumbrance Certificate | EC |
+| 25 | Sale Deed / Property Registration | Includes stamp duty rates |
+| 26 | Property Tax | Municipal; name the corporation |
+| 27 | Rent Agreement | Registration and stamp duty |
+| 28 | RERA Registration | Named per state — K-RERA, MahaRERA, UP-RERA |
+| 29 | Society / Housing NOC | |
+
+### Utilities and Civic — 3 · Local
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 30 | New Electricity Connection | Name the state discom |
+| 31 | New Water / Sewerage Connection | Municipal or state board |
+| 32 | Building Plan Approval | Includes completion/occupancy certificate |
+
+### Transport — 2 · Central rules, state RTO
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 33 | Driving Licence | Learner, permanent, renewal. Parivahan plus state RTO |
+| 34 | Vehicle Registration (RC) | New, transfer, duplicate |
+
+### Business — 8
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 35 | GST Registration | Central |
+| 36 | Shops and Establishment Registration | State labour dept |
+| 37 | Trade Licence | Municipal |
+| 38 | Udyam / MSME Registration | Central, free |
+| 39 | FSSAI Registration / Licence | Central, state-administered |
+| 40 | Professional Tax (PTRC/PTEC) | Not levied in every state — record if absent |
+| 41 | Fire NOC | State fire services |
+| 42 | Liquor Licence | State excise |
+
+### Employment — 3 · Central
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 43 | EPFO / UAN | |
+| 44 | ESI Card | |
+| 45 | Labour Card (BOCW) | State welfare board |
+
+### Finance — 3 · Central
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 46 | Bank Account KYC | RBI norms |
+| 47 | Income Tax Return | |
+| 48 | GST Returns | GSTR-1 / GSTR-3B |
+
+### Hospitality and Legal — 3
+| # | Document | Notes |
+| --: | :--- | :--- |
+| 49 | Eating House Licence | Municipal or police |
+| 50 | Police Verification for Hotel Guests | Includes C-Form for foreign nationals |
+| 51 | Notarized Affidavit | General purpose, stamp value |
 
 ---
 
@@ -94,101 +200,184 @@ answer anyone.
 
 - **Official sources only** for facts: the state portal, the department site, a
   citizen charter, a government order, a fee notification. Aggregator blogs,
-  YouTube and news articles may point you toward a source, but are never the
-  citation.
-- **Two sources for money.** Fees change most often and hurt most when wrong. A
-  single source caps the record at `PARTIALLY VERIFIED`.
-- **Record where each fact came from.** `Primary Source URL` must be the page the
-  fee and documents were actually read from, not the portal homepage.
-- **Date every record.** A fee with no date cannot be trusted a year from now.
-- **Never infer a state fee from another state.** State fees are set by that
-  state's own notification. Copying Karnataka's caste certificate fee to Bihar is
-  fabrication. Only genuinely central services — Aadhaar, PAN, Passport, GST,
-  EPFO, ESIC — share a fee nationwide.
-
----
+  YouTube and news may point you toward a source, but are never the citation.
+- **Two sources for money.** Fees change most and hurt most when wrong. A single
+  source caps the record at `PARTIALLY VERIFIED`.
+- **`Primary Source URL` is the page the fee and documents were actually read
+  from** — not the portal homepage.
+- **Date every record.**
+- **Never infer a state fee from another state.** Only genuinely central
+  services — Aadhaar, PAN, Passport, GST, EPFO, ESIC — share a fee nationwide.
 
 ## Verification status
 
 | Status | Means |
 | :--- | :--- |
-| `VERIFIED` | Official source; fee, documents and timeline all confirmed; checked within 90 days; fee seen in two places |
-| `PARTIALLY VERIFIED` | Official source, but some fields absent or the fee is single-sourced |
-| `CONFLICTING` | Two official sources disagree. **Say so — do not pick one.** |
-| `OUTDATED` | The source is genuine but stale or superseded |
+| `VERIFIED` | Official source; fee, documents and timeline confirmed; checked within 90 days; fee seen in two places |
+| `PARTIALLY VERIFIED` | Official source, but some fields absent or fee single-sourced |
+| `CONFLICTING` | Two official sources disagree. **Say so — do not pick one** |
+| `OUTDATED` | Source is genuine but stale or superseded |
+| `NOT AVAILABLE IN STATE` | The process genuinely does not exist here. A real finding — record it |
 
-`CONFLICTING` is a feature, not a failure. In the last batch the Bihar researcher
-noticed the Panchayati Raj page said 8,053 Gram Panchayats while the live
-drill-down showed 8,058, and flagged the discrepancy instead of choosing one.
-That is exactly the right instinct — keep it.
-
----
-
-## Which processes, in what order
-
-Central services are identical nationwide, so **research them once, not per
-state.** For a new state, work down this list.
-
-**Tier 1 — life events and identity.** Highest query volume, and currently
-missing from every state we hold.
-
-Birth certificate · Death certificate · Marriage certificate · Legal heir and
-succession certificate
-
-**Tier 2 — welfare and entitlement.**
-
-Caste certificate · Income certificate · Domicile or residence certificate · EWS
-certificate · Ration card · Old age and widow pension · Scholarship · MGNREGA
-job card
-
-**Tier 3 — land and property.**
-
-Land record, under the state's own name for it (Khatiyan, Jamabandi, Khatauni) ·
-Mutation · Encumbrance certificate · Property tax
-
-**Tier 4 — transport and business.**
-
-Driving licence · Vehicle registration · Shops and establishment registration ·
-Trade licence · Professional tax
-
-Tag every record with its `Government Level`: `Central`, `Central / State`,
-`State`, `District / Regional`, `Tehsil / Subdistrict`, `Urban Local Body`, or
-`Rural Local Body`. This decides whether a process is researched once or per
-state, and in rural-majority states it decides whether a citizen is sent to a
-municipal office or a block office.
+`CONFLICTING` is a feature. The Bihar researcher noticed the Panchayati Raj page
+said 8,053 Gram Panchayats while the live drill-down showed 8,058, and flagged
+it rather than choosing. Keep that instinct.
 
 ---
 
-## Self-check before handing over
+## The complete agent prompt
 
-Reject your own work if any of these fail.
+Replace `[STATE]` and run. Nothing else needs changing.
 
-- [ ] No cell contains a sentence explaining that something was not found
-- [ ] At least 60% of records carry two or more of the four core fields
-- [ ] No two records share a `Primary Source URL`, unless the fee genuinely is published on one shared page
-- [ ] Every fee has a source URL on which that fee is visible
-- [ ] No fee was copied from another state
-- [ ] Every record has a `Government Level` and a research date
-- [ ] Disagreeing sources are marked `CONFLICTING`, not silently resolved
+```text
+You are researching government services for [STATE], India, for PaperTrail — a
+civic-tech app that tells citizens what documents to bring, what a process
+costs, and how long it takes.
 
----
+Accuracy matters more than volume. A wrong fee is worse than no fee.
 
-## Output format
+STEP 1 — MAP THE STATE
+Identify [STATE]'s official portals before researching any document:
+  - the e-District / citizen services portal
+  - the land records portal
+  - the transport / RTO portal
+  - the single-window business portal
+  - the municipal corporation sites for the 2-3 largest cities
+  - the rural route: block / tehsil / gram panchayat offices
+List these with URLs before continuing.
 
-One JSON object per process. Use exactly these keys, with an empty string for
-anything not found on an official source.
+STEP 2 — RESEARCH ALL 51 PROCESSES BELOW
+Work the list in order. Do not substitute your own list. If a process does not
+exist in [STATE], set Verification Status to NOT AVAILABLE IN STATE and move on
+— that is a real finding, not a failure.
 
-```json
+CRITICAL: every state uses different local names. ALWAYS search the local name
+first, then English. Example: the land record of rights is RTC/Pahani in
+Karnataka, 7/12 in Maharashtra, Khatauni in UP, Jamabandi in Rajasthan,
+Khatiyan in Bihar. If you search only the English name you will wrongly report
+documents as unavailable.
+
+LIFE EVENTS (do these first — highest demand):
+ 1 Birth Certificate (Janma Praman Patra)
+ 2 Death Certificate (Mrityu Praman Patra)
+ 3 Marriage Certificate (Vivah Praman Patra; Hindu Marriage Act and Special
+   Marriage Act routes)
+ 4 Legal Heir / Succession Certificate (Varisu / Warisan / Uttaradhikar)
+
+CORE IDENTITY (central — confirm state availability and national fee):
+ 5 Aadhaar Card (enrolment and update)
+ 6 PAN Card
+ 7 Voter ID / EPIC
+ 8 Passport (note the state's PSK and POPSK locations)
+
+WELFARE AND ENTITLEMENT:
+ 9 Caste Certificate (Jati Praman Patra; SC/ST/OBC routes)
+10 Income Certificate (Aay Praman Patra)
+11 Domicile / Residence Certificate (Niwas / Mool Niwas)
+12 EWS Certificate
+13 Ration Card (APL/BPL/AAY)
+14 BPL Card
+15 Senior Citizen Card
+16 Old Age / Widow Pension (Vridha / Vidhwa Pension)
+17 Post-Matric Scholarship (SC/ST/OBC/minority)
+18 MGNREGA Job Card
+
+HEALTH:
+19 Ayushman Bharat or the [STATE] health scheme card (find the local name)
+20 Disability Certificate / UDID
+21 Health Insurance Card
+
+PROPERTY AND LAND:
+22 Land Record of Rights (find [STATE]'s local name)
+23 Mutation (Dakhil Kharij / Namantaran / Intekal)
+24 Encumbrance Certificate
+25 Sale Deed / Property Registration (include stamp duty)
+26 Property Tax (name the municipal corporation)
+27 Rent Agreement registration
+28 RERA Registration (find [STATE]'s RERA name)
+29 Society / Housing NOC
+
+UTILITIES AND CIVIC:
+30 New Electricity Connection (name the discom)
+31 New Water / Sewerage Connection
+32 Building Plan Approval and Completion Certificate
+
+TRANSPORT:
+33 Driving Licence (learner, permanent, renewal)
+34 Vehicle Registration Certificate (new, transfer, duplicate)
+
+BUSINESS:
+35 GST Registration
+36 Shops and Establishment Registration
+37 Trade Licence
+38 Udyam / MSME Registration
+39 FSSAI Registration / Licence
+40 Professional Tax PTRC/PTEC (not levied in every state — say so if absent)
+41 Fire NOC
+42 Liquor Licence
+
+EMPLOYMENT:
+43 EPFO / UAN
+44 ESI Card
+45 Labour Card (BOCW)
+
+FINANCE:
+46 Bank Account KYC
+47 Income Tax Return
+48 GST Returns (GSTR-1 / GSTR-3B)
+
+HOSPITALITY AND LEGAL:
+49 Eating House Licence
+50 Police Verification for Hotel Guests (incl. C-Form for foreign nationals)
+51 Notarized Affidavit (general purpose, note stamp value)
+
+STEP 3 — HARD RULES
+
+1. NEVER write a sentence explaining that information was missing. If the
+   official page does not state a fee, leave "Government Fee" as "". Do NOT
+   write "not stated", "not indicated", "not available on the portal", or any
+   similar phrase in ANY field. An empty string is the correct answer. The ONLY
+   field where sourcing prose belongs is "Verification Notes".
+
+2. Do not stop at the service catalogue, A-Z index or service list. Those
+   confirm a service exists but never carry fees or checklists. Open the
+   service's own page, its citizen charter, or the department fee notification.
+   If two records end up with the same Primary Source URL, go deeper.
+
+3. Look for [STATE]'s consolidated e-District or CSC fee notification. One
+   document often carries the fee for dozens of services at once.
+
+4. Prioritise filling: Required Documents, Government Fee, Expected Processing
+   Time, Who Can Apply. A record needs at least two of these to be useful.
+
+5. Never copy a fee from another state. State fees are set per state by
+   notification. Only Aadhaar, PAN, Passport, GST, EPFO and ESIC share a fee
+   nationwide.
+
+6. If two official sources disagree, set Verification Status to CONFLICTING and
+   explain in Verification Notes. Do not silently pick one.
+
+7. For municipal services, say which city or corporation you documented. For
+   rural routes, say whether it is the block, tehsil or gram panchayat office.
+
+STEP 4 — OUTPUT
+Return one JSON object per process, using exactly these keys, with "" for
+anything not found on an official source:
+
 {
   "Document / Service Name": "",
+  "Local / Regional Name": "",
   "Government Level": "",
+  "Sector": "",
   "Department": "",
   "Issuing Authority": "",
   "State": "",
+  "District / City Documented": "",
   "Who Can Apply": "",
   "Required Documents": "",
   "Government Fee": "",
   "Expected Processing Time": "",
+  "Validity": "",
   "Application Method": "",
   "Access Mode": "",
   "Official Portal": "",
@@ -201,11 +390,36 @@ anything not found on an official source.
   "Verification Notes": "",
   "Date Researched": ""
 }
+
+Government Level must be one of: Central, Central / State, State,
+District / Regional, Tehsil / Subdistrict, Urban Local Body, Rural Local Body.
+
+STEP 5 — SELF-CHECK BEFORE RETURNING
+State explicitly whether each of these passes. Fix any that fail, then re-check.
+  - No cell anywhere contains a sentence explaining something was not found
+  - All 51 processes attempted, each either researched or marked
+    NOT AVAILABLE IN STATE
+  - At least 60% of records have two or more of the four core fields
+  - No two records share a Primary Source URL unless the fee genuinely is
+    published on one shared page
+  - Every fee has a source URL on which that fee is visible
+  - No fee was copied from another state
+  - Local names were searched, not just English names
+  - Every record has a Government Level and a research date
+
+Finish with a coverage table: sector, attempted, completed with 2+ core fields,
+marked unavailable. Then list every process you could not complete and say what
+was missing.
 ```
 
-`Verification Notes` is the one place a sentence about sourcing belongs. Keep
-that kind of prose out of every other field.
+---
 
-Run the result through `scripts/import_state_research.py`, which grades each
-record and reports how many are usable. If the guide count comes back low, the
-cause is almost always rule 1 or rule 3.
+## After the research comes back
+
+```bash
+python scripts/import_state_research.py --source-dir "<folder with the workbooks>"
+```
+
+It grades each record and prints usable versus directory counts per state. The
+last batch was **21% usable**. Below roughly 60%, the cause is almost always
+rule 1 (absence prose) or rule 3 (catalogue sourcing).
