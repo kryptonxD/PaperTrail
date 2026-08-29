@@ -19,6 +19,7 @@ log_memory("1. Before any imports (Start of server.py)")
 
 import json
 import re
+import time
 import uuid
 import asyncio
 import logging
@@ -91,7 +92,28 @@ if not GROQ_API_KEY or not SUPABASE_URL or not SUPABASE_ANON_KEY:
     import sys
     sys.exit(1)
 
-AUTH_AVAILABLE = True  # refreshed by the startup probe below
+AUTH_AVAILABLE = True     # refreshed by the startup probe below
+_auth_probed_at = 0.0     # monotonic seconds of the last probe
+AUTH_RECHECK_SECONDS = 60
+
+
+async def auth_available() -> bool:
+    """Report whether sign-in can work, re-probing after a failure.
+
+    Probing only at startup meant that restoring the identity provider left the
+    app insisting sign-in was down until someone redeployed the backend. A
+    failed result is therefore re-checked at most once a minute, so recovery is
+    picked up on its own. A success is trusted and not re-probed, since the
+    per-request cost would buy nothing.
+    """
+    global _auth_probed_at
+    if AUTH_AVAILABLE:
+        return True
+    now = time.monotonic()
+    if now - _auth_probed_at >= AUTH_RECHECK_SECONDS:
+        _auth_probed_at = now
+        await probe_auth_provider()
+    return AUTH_AVAILABLE
 
 
 async def probe_auth_provider() -> bool:
@@ -101,7 +123,8 @@ async def probe_auth_provider() -> bool:
     entirely, and every sign-in then dies at the redirect with nothing to show
     the user. Probing once at startup lets the API say so plainly instead.
     """
-    global AUTH_AVAILABLE
+    global AUTH_AVAILABLE, _auth_probed_at
+    _auth_probed_at = time.monotonic()
     try:
         async with httpx.AsyncClient(timeout=10) as ac:
             r = await ac.get(f"{SUPABASE_URL}/auth/v1/health")
@@ -333,12 +356,13 @@ async def root():
 
 @api.get("/meta")
 async def meta():
+    auth_ok = await auth_available()
     return {
         "states": sorted({d["state"] for d in ALL_DOCS}),
         "categories": CATEGORIES,
         "languages": [{"code": c, "name": n} for c, n in LANGUAGES.items()],
         "doc_count": len(ALL_DOCS),
-        "auth_available": AUTH_AVAILABLE,
+        "auth_available": auth_ok,
     }
 
 @api.get("/documents")
