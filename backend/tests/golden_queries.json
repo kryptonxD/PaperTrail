@@ -60,6 +60,51 @@
       "q": "vehicle registration certificate",
       "state": "Karnataka",
       "expect": "Vehicle Registration Certificate (RC)"
+    },
+    {
+      "q": "birth certificate",
+      "state": "Delhi",
+      "expect": "Birth Certificate"
+    },
+    {
+      "q": "birth certificate",
+      "state": "Jharkhand",
+      "expect": "Birth Certificate"
+    },
+    {
+      "q": "death certificate",
+      "state": "West Bengal",
+      "expect": "Death Certificate"
+    },
+    {
+      "q": "legal heir certificate",
+      "state": "Delhi",
+      "expect": "Legal Heir / Succession Certificate"
+    },
+    {
+      "q": "marriage certificate",
+      "state": "Jharkhand",
+      "expect": "Marriage Certificate"
+    },
+    {
+      "q": "mgnrega job card",
+      "state": "Jharkhand",
+      "expect": "MGNREGA Job Card"
+    },
+    {
+      "q": "caste certificate",
+      "state": "Jharkhand",
+      "expect": "Caste Certificate"
+    },
+    {
+      "q": "ration card",
+      "state": "West Bengal",
+      "expect": "Ration Card"
+    },
+    {
+      "q": "driving licence",
+      "state": "Delhi",
+      "expect": "Driving Licence"
     }
   ],
   "absent": [

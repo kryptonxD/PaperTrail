@@ -165,12 +165,31 @@ def _load_research(fname: str) -> List[Dict[str, Any]]:
     return [r for r in rows if r.get("grade") == "guide"]
 
 
+RESEARCH_DIR = ROOT_DIR / "data" / "research"
+
+
+def _load_all_research() -> List[Dict[str, Any]]:
+    """Load every converted research dataset in backend/data/research.
+
+    Discovered rather than listed, so adding a state is a data change and not a
+    code change. The frontend state picker reads the same set through
+    /api/meta, so a new file reaches the UI without a frontend release.
+    """
+    docs: List[Dict[str, Any]] = []
+    if not RESEARCH_DIR.exists():
+        logger.warning("Research directory not found: %s", RESEARCH_DIR)
+        return docs
+    for path in sorted(RESEARCH_DIR.glob("*.json")):
+        loaded = _load_research(path.name)
+        logger.info("Loaded %d guide-grade records from %s", len(loaded), path.name)
+        docs.extend(loaded)
+    return docs
+
+
 ALL_DOCS: List[Dict[str, Any]] = (
     _load_state("karnataka.json", "Karnataka")
     + _load_state("maharashtra.json", "Maharashtra")
-    + _load_research("uttar_pradesh.json")
-    + _load_research("bihar.json")
-    + _load_research("rajasthan.json")
+    + _load_all_research()
 )
 logger.info(
     "Loaded %d documents across %d states.",

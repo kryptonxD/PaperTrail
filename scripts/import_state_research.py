@@ -87,34 +87,57 @@ JURISDICTION_MAP = {
 }
 
 
-# The workbooks use a richer sector taxonomy than the live corpus. Fold it onto
-# the existing ten categories so Browse does not show "Transport" beside
-# "Transport & Mobility". Placement follows where the equivalent process already
-# sits in the Karnataka/Maharashtra data (Fire NOC and FSSAI are Business there,
-# not Health or Legal).
-SECTOR_MAP = {
-    "Identity, Citizenship & Elections": "Core Identity",
-    "Registration & Civil Records": "Core Identity",
-    "Digital Government & Service Access": "Core Identity",
-    "Business, Industry & Investment": "Business",
-    "Taxation & Commercial Regulation": "Finance",
-    "Food & Drug Regulation": "Business",
-    "Fire & Emergency Services": "Business",
-    "Excise": "Business",
-    "Energy & Electrical Safety": "Business",
-    "Environment, Forest & Water Regulation": "Business",
-    "Labour, Employment & Social Security": "Employment",
-    "Land, Revenue & Property Records": "Property",
-    "Housing, Planning & Construction": "Property",
-    "Urban Civic Services": "Property",
-    "Transport & Mobility": "Transport",
-    "Agriculture": "Welfare",
-    "Other Government Services": "General",
-}
+# Each state's researcher invents its own sector vocabulary - six workbooks
+# produced 43 distinct sector names for the same underlying processes ("Life
+# Events", "Birth, Death & Civil Registration", "Civil Registration &
+# Identity"). Matching on keywords rather than exact strings keeps Browse to the
+# ten categories the live corpus already uses, and survives names no one has
+# invented yet.
+#
+# Order matters: the first rule whose keyword appears wins, so narrower rules
+# come first. "Labour, Employment & Skills" must reach Employment before the
+# education rule claims it for "skills".
+SECTOR_RULES = [
+    (("transport", "mobility", "vehicle", "motor"), "Transport"),
+    (("labour", "employment", "industrial", "epf", "esi"), "Employment"),
+    (("police", "justice", "grievance", "legal", "notar", "court", "safety"), "Legal"),
+    (("health", "medical", "insurance", "family welfare"), "Health"),
+    (("tourism", "hospitality", "culture", "religion", "hotel"), "Hospitality"),
+    (("land", "revenue", "property", "housing", "urban", "municipal"), "Property"),
+    (("utilit", "energy", "infrastructure", "water", "electric", "civic"), "Property"),
+    (("identity", "civil registration", "birth", "death", "life event",
+      "certificates"), "Core Identity"),
+    (("scholarship", "education", "skill"), "Welfare"),
+    (("social", "pension", "welfare", "entitlement", "protection",
+      "inclusion"), "Welfare"),
+    (("food", "civil supplies", "consumer", "ration"), "Welfare"),
+    (("agricultur", "rural", "animal", "dairy", "fisheries"), "Welfare"),
+    (("tax", "finance", "gst", "banking"), "Finance"),
+    (("business", "industry", "trade", "commerce", "regulation", "environment",
+      "forest", "mining", "metrology", "excise"), "Business"),
+]
 
 
 def map_category(sector: str) -> str:
-    return SECTOR_MAP.get(sector, sector or "General")
+    """Fold a workbook sector name onto the live corpus's ten categories."""
+    t = (sector or "").lower()
+    if not t:
+        return "General"
+    for keywords, category in SECTOR_RULES:
+        if any(k in t for k in keywords):
+            return category
+    return "General"
+
+
+def verbatim(v: Any) -> str:
+    """Read a cell without absence detection.
+
+    Verification Status is a controlled vocabulary and Verification Notes is the
+    one field where prose about sourcing belongs. Running either through clean()
+    corrupts them: "NOT AVAILABLE IN STATE" contains "not available", so it
+    would be blanked and the record silently demoted to UNVERIFIED.
+    """
+    return "" if v is None else str(v).strip()
 
 
 def clean(v: Any) -> str:
@@ -179,7 +202,12 @@ def convert(raw: Dict[str, Any], state: str) -> Optional[Dict[str, Any]]:
     if not name:
         return None
 
-    status = (clean(raw.get("Verification Status")) or "UNVERIFIED").upper()
+    # Recorded so the researcher gets credit for checking, but never imported:
+    # listing a service the state does not offer is worse than omitting it.
+    if verbatim(raw.get("Verification Status")).upper() == "NOT AVAILABLE IN STATE":
+        return None
+
+    status = (verbatim(raw.get("Verification Status")) or "UNVERIFIED").upper()
     answered = sum(1 for f in ANSWER_FIELDS if clean(raw.get(f)))
     grade = (
         "guide"
@@ -239,7 +267,7 @@ def convert(raw: Dict[str, Any], state: str) -> Optional[Dict[str, Any]]:
         "eligibility": clean(raw.get("Who Can Apply")),
         "district": clean(raw.get("District")),
         "verification_status": status,
-        "verification_notes": clean(raw.get("Verification Notes")),
+        "verification_notes": verbatim(raw.get("Verification Notes")),
         "record_id": clean(raw.get("Record ID")),
     }
 
